@@ -6,6 +6,10 @@ wtBackoffice.config(['$routeProvider', function ($routeProvider) {
     
     $routeProvider.when('/', {
         templateUrl: 'modules/login/login.html',
-        controller: 'modules/login/loginController.js'
+        controller: 'loginController'
     });
 }]);
+
+wtBackoffice.run(function($http) {
+  $http.defaults.headers.post["Content-Type"] = "application/json";
+});
