@@ -1,0 +1,10 @@
+<div>
+    <div data-loader="loading"></div>
+    <input type="text" data-ng-model="user.name" required>
+    <input type="email" data-ng-model="user.email" required>
+    <input type="text" data-ng-model="user.status" required>
+    
+    <button data-ng-click="save()" data-ng-bind="saveLabel"></button>
+    <button data-ng-click="delete();"hide data-ng-hide="isNew">Delete</button>
+    <button data-ng-click="goBack();">Cancel</button>
+</div>

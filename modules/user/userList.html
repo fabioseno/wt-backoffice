@@ -1,0 +1,20 @@
+<div>
+    <div data-loader="loading"></div>
+    <button data-ng-click="goTo('/user');">Create User</button>
+    <button data-ng-click="page(1);">Page1</button>
+    <button data-ng-click="page(2);">Page2</button>
+    <table>
+        <thead>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th></th>
+        </thead>
+        <tr data-ng-repeat="user in users" data-ng-click="goTo('/user/{{ user.id }}')">
+            <td data-ng-bind="user.name"></td>
+            <td data-ng-bind="user.email"></td>
+            <td data-ng-bind="user.status"></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
