@@ -4,8 +4,9 @@ wtBackoffice.controller('userListController', ['$scope', 'invoker', function ($s
     
     $scope.users = [];
     $scope.loading = false;
+    $scope.currentPage = 1;
     
-    $scope.page = function(num) {
+    $scope.page = function (num) {
         $scope.showUsers(num);
     };
     
@@ -27,7 +28,9 @@ wtBackoffice.controller('userListController', ['$scope', 'invoker', function ($s
             };
         
         function onSuccess(result) {
-            $scope.users = result.data;
+            $scope.users = result.data.list;
+            $scope.totalPages = result.data.totalPages;
+            $scope.currentPage = result.data.currentPage;
         }
         
         invoker.invoke('user', 'getList', data, onSuccess, null, null, options);

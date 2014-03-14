@@ -1,6 +1,9 @@
-<div>
-    <div data-loader="loading"></div>
-    <div><input type="text" placeholder="e-mail" data-ng-model="email"></div>
-    <div><input type="password" placeholder="password" data-ng-model="password"></div>
-    <div><button data-ng-click="authenticate()">Login</button></div>
+<div class="container">
+    <form class="form-signin" role="form">
+        <div data-loader="loading"></div>
+        <h2 class="form-signin-heading">Login</h2>
+        <input type="text" class="form-control" placeholder="e-mail" data-ng-model="email">
+        <input type="password" class="form-control" placeholder="password" data-ng-model="password">
+        <button class="btn btn-large btn-primary" data-ng-click="authenticate()">Login</button>
+    </div>
 </div>

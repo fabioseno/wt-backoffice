@@ -1,20 +1,82 @@
-<div>
-    <div data-loader="loading"></div>
-    <button data-ng-click="goTo('/user');">Create User</button>
-    <button data-ng-click="page(1);">Page1</button>
-    <button data-ng-click="page(2);">Page2</button>
-    <table>
-        <thead>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th></th>
-        </thead>
-        <tr data-ng-repeat="user in users" data-ng-click="goTo('/user/{{ user.id }}')">
-            <td data-ng-bind="user.name"></td>
-            <td data-ng-bind="user.email"></td>
-            <td data-ng-bind="user.status"></td>
-            <td></td>
-        </tr>
-    </table>
+<div class="content">
+    <div id="pad-wrapper" class="users-list">
+        <div class="row header">
+            <h3>Users</h3>
+            <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                <input type="text" class="col-md-5 search" placeholder="Type a search term..." data-ng-model="searchTerm">
+                
+                <!-- custom popup filter -->
+                <!-- styles are located in css/elements.css -->
+                <!-- script that enables this dropdown is located in js/theme.js -->
+                <div class="ui-dropdown">
+                    <div class="head" data-toggle="tooltip" title="" data-original-title="Click me!">
+                        Filter users
+                        <i class="arrow-down"></i>
+                    </div>  
+                    <div class="dialog">
+                        <div class="pointer">
+                            <div class="arrow"></div>
+                            <div class="arrow_border"></div>
+                        </div>
+                        <div class="body">
+                            <p class="title">
+                                Show users where:
+                            </p>
+                            <div class="form">
+                                <select>
+                                    <option>Name</option>
+                                    <option>Email</option>
+                                    <option>Number of orders</option>
+                                    <option>Signed up</option>
+                                    <option>Last seen</option>
+                                </select>
+                                <select>
+                                    <option>is equal to</option>
+                                    <option>is not equal to</option>
+                                    <option>is greater than</option>
+                                    <option>starts with</option>
+                                    <option>contains</option>
+                                </select>
+                                <input type="text" class="form-control">
+                                <a class="btn-flat small">Add filter</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a data-ng-click="goTo('/user');" class="btn-flat success pull-right">
+                    <span>+</span>
+                    NEW USER
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div data-loader="loading"></div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4 sortable">Nome</th>
+                            <th class="col-md-4 sortable">
+                                <span class="line"></span>
+                                Email
+                            </th>
+                            <th class="col-md-4 sortable">
+                                <span class="line"></span>
+                                Status
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tr data-ng-repeat="user in users | filter : searchTerm" data-ng-click="goTo('/user/{{ user.id }}')">
+                        <td data-ng-bind="user.name"></td>
+                        <td data-ng-bind="user.email"></td>
+                        <td data-ng-bind="user.status"></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <data-pager class="pull-right" current-page="{{ currentPage }}" total-pages="{{ totalPages }}" action="showUsers(page)"></data-pager>
+            </div>
+        </div>
+    </div>
 </div>

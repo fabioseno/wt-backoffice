@@ -18,6 +18,8 @@ wtBackoffice.controller('loginController', ['$scope', 'invoker', 'authentication
             if (error.status === 401) {
                 $scope.eventHub.fire('UNAUTHORIZED', error);
                 $scope.toastr.show('Access denied!', 'error');
+            } else {
+                $scope.toastr.show('Unexpected Error<br />Please try again later!', 'error');
             }
         }
         

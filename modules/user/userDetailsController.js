@@ -7,7 +7,7 @@ wtBackoffice.controller('userDetailsController', ['$scope', '$routeParams', 'inv
     $scope.saveLabel = 'Create';
     $scope.isNew = true;
     
-    function execute (operation){
+    function execute(operation) {
         var options = {
             loaderObject: $scope,
             loaderProperty: 'loading'
@@ -32,7 +32,9 @@ wtBackoffice.controller('userDetailsController', ['$scope', '$routeParams', 'inv
     };
     
     $scope.delete = function () {
-        execute('deleteUser');
+        if (confirm('Confirm operation?')) {
+            execute('deleteUser');    
+        }
     };
     
     $scope.showUserDetails = function (id) {

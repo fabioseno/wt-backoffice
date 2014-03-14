@@ -2,27 +2,37 @@
 <html data-ng-app='wt-backoffice'>
     <head>
         <link rel="stylesheet" href="lib/toastr/toastr.css" type="text/css">
+        <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap-overrides.css" type="text/css">
+        
+        <link rel="stylesheet" href="css/layout.css" type="text/css">
+        <link rel="stylesheet" href="css/elements.css" type="text/css">
+        <link rel="stylesheet" href="css/icons.css" type="text/css">
+        
+        <link rel="stylesheet" href="css/new-user.css" type="text/css">
+        <link rel="stylesheet" href="css/user-list.css" type="text/css" media="screen">
     </head>
     <body data-ng-controller="rootController">
         <div data-ng-view></div>
         
-        <script src="lib/jquery/dist/jquery.js"></script>
-        <script src="lib/angular/angular.js"></script>
-        <script src="lib/angular-route/angular-route.js"></script>
-        <script src="lib/angular-touch/angular-touch.js"></script>
-        <script src="lib/spin/spin.js"></script>
-        <script src="lib/toastr/toastr.js"></script>
+        <script src="lib/jquery/dist/jquery.min.js"></script>
+        <script src="lib/angular/angular.min.js"></script>
+        <script src="lib/angular-route/angular-route.min.js"></script>
+        <script src="lib/angular-touch/angular-touch.min.js"></script>
+        <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="lib/spin/spin.min.js"></script>
+        <script src="lib/toastr/toastr.min.js"></script>
         
         <script src="lib/webtree/core_0.1.0.js"></script>
         <script src="lib/webtree/ui_0.1.0.js"></script>
         
         <script src="modules/backoffice.js"></script>
         <script src="config/config.js"></script>
+        
         <script src="modules/root/rootController.js"></script>
         <script src="modules/login/loginController.js"></script>
         <script src="modules/user/userListController.js"></script>
         <script src="modules/user/userDetailsController.js"></script>
-        
         
     </body>
 </html>

@@ -20,17 +20,17 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: ['js/backoffice.js', 'js/**/*.js'],
-                dest: 'dist/core_<%= pkg.version %>.js'
+                dest: 'dist/backoffice_<%= pkg.version %>.js'
             }
         },
         
         uglify: {
             options: {
-                banner: '/*! Core <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '/*! Backoffice <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src: 'dist/core_<%= pkg.version %>.js',
-                dest: 'dist/core_<%= pkg.version %>.min.js'
+                src: 'dist/backoffice_<%= pkg.version %>.js',
+                dest: 'dist/backoffice_<%= pkg.version %>.min.js'
             }
         },
         
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
                 version: '<%= pkg.version %>',
                 url: '<%= pkg.homepage %>',
                 options: {
-                    paths: ['js'],
+                    paths: ['modules'],
                     outdir: 'docs/'
                 }
             }
