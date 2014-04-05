@@ -1,14 +1,12 @@
 /*global wtBackoffice*/
-wtBackoffice.controller('userListController', ['$scope', 'invoker', function ($scope, invoker) {
+wtBackoffice.controller('userListController', ['$scope', 'invoker', 'processHandler', function ($scope, invoker, processHandler) {
     'use strict';
     
-    $scope.users = [];
-    $scope.loading = false;
-    $scope.currentPage = 1;
+    var process = processHandler($scope, 'loading');
     
-    $scope.page = function (num) {
-        $scope.showUsers(num);
-    };
+    $scope.users = [];
+    $scope.currentPage = 1;
+    $scope.loading = process.loading;
     
     $scope.showUsers = function (page) {
         
@@ -18,14 +16,10 @@ wtBackoffice.controller('userListController', ['$scope', 'invoker', function ($s
                 pageSize: 2,
                 currentPage: page,
                 sort: {
-                    name: -1
+                    name: 1
                 }
             }
-        },
-            options = {
-                loaderObject: $scope,
-                loaderProperty: 'loading'
-            };
+        };
         
         function onSuccess(result) {
             $scope.users = result.data.list;
@@ -33,7 +27,7 @@ wtBackoffice.controller('userListController', ['$scope', 'invoker', function ($s
             $scope.currentPage = result.data.currentPage;
         }
         
-        invoker.invoke('user', 'getList', data, onSuccess, null, null, options);
+        invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);
         
     };
     

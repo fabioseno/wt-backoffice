@@ -18,8 +18,8 @@ module.exports = function (config) {
         files: [
             'lib/angular/angular.js',
             'lib/angular-mocks/angular-mocks.js',
-            'modules/backoffice.js',
-            'modules/**/*.js',
+            'components/backoffice.js',
+            'components/**/*.js',
             'tests/**/*.js'
         ],
         
