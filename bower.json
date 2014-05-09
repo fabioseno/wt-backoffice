@@ -1,0 +1,28 @@
+{
+  "name": "wt-backoffice",
+  "version": "0.1.0",
+  "homepage": "https://github.com/fabioseno/wt-backoffice",
+  "authors": [
+    "Fábio Akira Yoshida <fabioseno@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-mocks": "~1.2.16",
+    "angular-touch": "~1.2.16",
+    "angular-route": "~1.2.16",
+    "bootstrap": "~3.1.1",
+    "angular": "~1.2.16",
+    "toastr": "~2.0.1",
+    "jsSHA": "~1.5.0",
+    "components-font-awesome": "~4.0.3"
+  }
+}

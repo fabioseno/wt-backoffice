@@ -1,0 +1,98 @@
+body {
+    background-color: #2c3742;
+}
+
+/* Header */
+header ul {
+    border-bottom: 1px solid #101417;
+}
+
+header ul li {
+    color: #ffffff;
+    border-left: 1px solid #101417;
+}
+
+header ul li a {
+    color: #ffffff;
+}
+
+header ul li a:hover {
+    color: #ffffff;
+    background-color: #101417;
+}
+
+header ul li:first-child {
+    min-width: 80px;
+    min-height: 30px;
+    margin: 10px 20px 10px 14px;
+    border-left-style: none;
+}
+
+header ul li:first-child a {
+    background-image: url('../img/logo-header.png');
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 30px;
+}
+
+header ul li:first-child a:hover {
+    background-color: transparent;
+}
+/* End Header */
+
+/* Menu */
+div.page menu {
+    background-color: #f7f7f7;
+    font-size: 13px;
+    border-right: 1px solid #dae3e9;
+}
+
+#side-menu li a:hover,
+#side-menu li.active > a {
+    color: #33455a;
+    text-decoration: none;
+}
+
+#side-menu ul.sub-menu li a:hover,
+#side-menu ul.sub-menu li.active {
+    font-weight: bold;
+}
+
+#side-menu > li {
+    border-bottom: 1px solid #dae1e8;
+    box-shadow: 0 2px 1px -1px #FFFFFF;
+    color: #6e829b;
+}
+
+#side-menu li a {
+    color: #6e829b;
+}
+
+/* End Menu */
+
+/* Login */
+div.login div.logo {
+    background-image: url('../img/logo-login.png');
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 55px;
+    margin: 0 auto;
+}
+
+div.login div.box h2 {
+    font-size: 25px;
+}
+
+/* End Login */
+
+header {
+    background-color: #2c3742;
+}
+
+/* Page */
+
+div.page {
+    background-color: #ffffff;
+}
+
+/* End Page */
