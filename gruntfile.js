@@ -41,7 +41,7 @@ module.exports = function (grunt) {
                 version: '<%= pkg.version %>',
                 url: '<%= pkg.homepage %>',
                 options: {
-                    paths: ['components'],
+                    paths: ['src/components'],
                     outdir: 'docs/'
                 }
             }
@@ -62,6 +62,6 @@ module.exports = function (grunt) {
     });
     
     // Default task
-    grunt.registerTask('default', ['test', 'clean', 'jshint', 'concat', 'uglify', 'yuidoc']);
+    grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'yuidoc']);
     
 };

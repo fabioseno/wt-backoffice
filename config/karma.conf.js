@@ -16,10 +16,10 @@ module.exports = function (config) {
         
         // list of files / patterns to load in the browser
         files: [
-            'lib/angular/angular.js',
-            'lib/angular-mocks/angular-mocks.js',
-            'components/backoffice.js',
-            'components/**/*.js',
+            'src/lib/angular/angular.js',
+            'src/lib/angular-mocks/angular-mocks.js',
+            'src/components/app.js',
+            'src/components/**/*.js',
             'tests/**/*.js'
         ],
         
@@ -36,7 +36,7 @@ module.exports = function (config) {
             // source files, that you wanna generate coverage for
             // do not include tests or libraries
             // (these files will be instrumented by Istanbul)
-            'js/**/*.js': ['coverage']
+            'src/components/**/*.js': ['coverage']
         },
         
         // optionally, configure the reporter
