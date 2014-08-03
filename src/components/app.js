@@ -5,16 +5,16 @@ app.config(['$routeProvider', function ($routeProvider) {
     'use strict';
     
     $routeProvider.when('/', {
-        templateUrl: 'src/components/login/login.html',
+        templateUrl: 'components/login/login.html',
         controller: 'loginController'
     }).when('/users', {
-        templateUrl: 'src/components/user/userList.html',
+        templateUrl: 'components/user/userList.html',
         controller: 'userListController'
     }).when('/user', {
-        templateUrl: 'src/components/user/userDetails.html',
+        templateUrl: 'components/user/userDetails.html',
         controller: 'userDetailsController'
     }).when('/user/:id', {
-        templateUrl: 'src/components/user/userDetails.html',
+        templateUrl: 'components/user/userDetails.html',
         controller: 'userDetailsController'
     }).otherwise({
         redirectTo: '/'

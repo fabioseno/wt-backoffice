@@ -1,3 +1,4 @@
+/*global app*/
 app.controller('menuController', ['$scope', '$location', function ($scope, $location) {
     'use strict';
     
@@ -6,13 +7,13 @@ app.controller('menuController', ['$scope', '$location', function ($scope, $loca
     $scope.menuItems = [
         {
             id: 'home',
-            class: 'fa fa-home fa-lg fa-fw',
+            'class': 'fa fa-home fa-lg fa-fw',
             name: 'Home',
             link: '/users'
         },
         {
             id: 'users',
-            class: 'fa fa-users fa-lg fa-fw',
+            'class': 'fa fa-users fa-lg fa-fw',
             name: 'Users',
             link: '',
             items: [
@@ -42,5 +43,5 @@ app.controller('menuController', ['$scope', '$location', function ($scope, $loca
             $scope.selectedItem = menuItem;
             $location.path(menuItem.link);
         }
-    }
+    };
 }]);

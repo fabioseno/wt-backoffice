@@ -1,4 +1,5 @@
 /*global app*/
+/*jslint newcap: true */
 app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'authentication', 'processHandler', function ($scope, $q, invoker, translate, authentication, processHandler) {
     'use strict';
     

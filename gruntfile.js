@@ -5,10 +5,10 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        clean: ['dist', 'tests/coverage', 'docs'],
+        clean: ['docs', 'tests/coverage', 'www'],
 
         jshint: {
-            all: ['js/**/*.js']
+            all: ['src/components/**/*.js']
         },
 
         karma: {
@@ -19,8 +19,22 @@ module.exports = function (grunt) {
 
         concat: {
             dist: {
-                src: ['js/backoffice.js', 'js/**/*.js'],
-                dest: 'dist/backoffice_<%= pkg.version %>.js'
+                src: ['src/components/backoffice.js', 'src/components/**/*.js'],
+                dest: 'dist/app.js'
+            }
+        },
+        
+        copy: {
+            dev: {
+                files: [
+                    { expand: true, cwd: 'src', src: ['assets/**'], dest: 'www/'},
+                    { expand: true, cwd: 'dist', src: ['app.js'], dest: 'www/components/'},
+                    { expand: true, cwd: 'src/components', src: ['translate.js'], dest: 'www/components/'},
+                    { expand: true, cwd: 'src', src: ['components/**/*.html'], dest: 'www/'},
+                    { expand: true, cwd: 'src', src: ['config/*'], dest: 'www'},
+                    { expand: true, cwd: 'src', src: ['lib/**'], dest: 'www/'},
+                    { expand: true, cwd: 'src', src: ['index.html'], dest: 'www/'}
+                ]
             }
         },
 
@@ -29,8 +43,8 @@ module.exports = function (grunt) {
                 banner: '/*! Backoffice <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src: 'dist/backoffice_<%= pkg.version %>.js',
-                dest: 'dist/backoffice_<%= pkg.version %>.min.js'
+                src: 'dist/app.js',
+                dest: 'dist/app.min.js'
             }
         },
 
@@ -51,7 +65,7 @@ module.exports = function (grunt) {
             'dev': {
 
                 // the server root directory
-                //root: '/index.html',
+                root: 'www',
 
                 port: 8282,
                 // port: function() { return 8282; }
@@ -71,6 +85,7 @@ module.exports = function (grunt) {
 
     // Load plugins
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -86,6 +101,6 @@ module.exports = function (grunt) {
     // Default task
     grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'yuidoc']);
     
-    grunt.registerTask('dev', ['default', 'http-server:dev']);
+    grunt.registerTask('dev', ['default', 'copy:dev', 'http-server:dev']);
 
 };
