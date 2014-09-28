@@ -14,17 +14,18 @@ app.controller('userListController', ['$scope', 'invoker', 'processHandler', fun
             filter: {},
             options: {
                 pageSize: 2,
-                currentPage: page,
-                sort: {
-                    name: 1
-                }
+                currentPage: page
+//                ,
+//                sort: {
+//                    name: 1
+//                }
             }
         };
         
         function onSuccess(result) {
             $scope.users = result.data.list;
-            $scope.totalPages = result.data.totalPages;
-            $scope.currentPage = result.data.currentPage;
+            $scope.totalPages = result.data.page.totalPages;
+            $scope.currentPage = result.data.page.currentPage;
         }
         
         invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);

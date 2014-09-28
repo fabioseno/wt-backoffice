@@ -28,9 +28,9 @@ app.controller('userDetailsController', ['$scope', '$routeParams', '$window', 'i
         execute(operation);
     };
     
-    $scope.delete = function () {
+    $scope.remove = function () {
         if ($window.confirm(translate.getTerm('MSG_CONFIRM_OPERATION'))) {
-            execute('deleteUser');
+            execute('removeUser');
         }
     };
     

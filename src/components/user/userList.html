@@ -18,7 +18,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div data-loader="loading"></div>
+<!--                <div data-loader="loading"></div>-->
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -35,6 +35,7 @@
                         </tr>
                     </thead>
                     <tr data-ng-repeat="user in users | filter : searchTerm" data-ng-click="goTo('/user/{{ user.id }}')">
+                        <td data-ng-bind="user.id"></td>
                         <td data-ng-bind="user.name"></td>
                         <td data-ng-bind="user.email"></td>
                         <td data-ng-bind="user.status"></td>

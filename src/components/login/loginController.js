@@ -1,4 +1,4 @@
-/*global app*/
+/*global app, jsSHA*/
 /*jslint newcap: true */
 app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'authentication', 'processHandler', function ($scope, $q, invoker, translate, authentication, processHandler) {
     'use strict';
@@ -18,7 +18,7 @@ app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'auth
             };
         
         function onSuccess(result) {
-            authentication.setSessionId(result.headers('SessionId'));
+            authentication.sessionId = result.headers('SessionId');
             $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.name), 'success');
             $scope.location.path('/users');
         }

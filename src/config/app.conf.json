@@ -2,29 +2,29 @@
 angular.module('wt-backoffice').constant('wtCoreConfig', {
     authentication: {
         authenticate: {
-            url: 'http://localhost:8080/login',
+            url: 'http://localhost:8080/api/login',
             method: 'POST'
         }
     },
     user: {
         getList: {
-            url: 'http://localhost:8080/users',
+            url: 'http://localhost:8080/api/users',
             method: 'POST'
         },
         getDetails: {
-            url: 'http://localhost:8080/user/:id',
+            url: 'http://localhost:8080/api/user/:id',
             method: 'GET'
         },
         createUser: {
-            url: 'http://localhost:8080/user',
+            url: 'http://localhost:8080/api/user',
             method: 'POST'
         },
         updateUser: {
-            url: 'http://localhost:8080/user/:id',
+            url: 'http://localhost:8080/api/user/:id',
             method: 'PUT'
         },
-        deleteUser: {
-            url: 'http://localhost:8080/user/:id',
+        removeUser: {
+            url: 'http://localhost:8080/api/user/:id',
             method: 'DELETE'
         }
     }

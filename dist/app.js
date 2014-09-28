@@ -101,7 +101,7 @@ app.controller('rootController', ['$scope', '$rootScope', '$window', '$location'
     });
     
 }]);
-/*global app*/
+/*global app, jsSHA*/
 /*jslint newcap: true */
 app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'authentication', 'processHandler', function ($scope, $q, invoker, translate, authentication, processHandler) {
     'use strict';
@@ -121,7 +121,7 @@ app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'auth
             };
         
         function onSuccess(result) {
-            authentication.setSessionId(result.headers('SessionId'));
+            authentication.sessionId = result.headers('SessionId');
             $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.name), 'success');
             $scope.location.path('/users');
         }
@@ -270,9 +270,9 @@ app.controller('userDetailsController', ['$scope', '$routeParams', '$window', 'i
         execute(operation);
     };
     
-    $scope.delete = function () {
+    $scope.remove = function () {
         if ($window.confirm(translate.getTerm('MSG_CONFIRM_OPERATION'))) {
-            execute('deleteUser');
+            execute('removeUser');
         }
     };
     
@@ -314,17 +314,18 @@ app.controller('userListController', ['$scope', 'invoker', 'processHandler', fun
             filter: {},
             options: {
                 pageSize: 2,
-                currentPage: page,
-                sort: {
-                    name: 1
-                }
+                currentPage: page
+//                ,
+//                sort: {
+//                    name: 1
+//                }
             }
         };
         
         function onSuccess(result) {
             $scope.users = result.data.list;
-            $scope.totalPages = result.data.totalPages;
-            $scope.currentPage = result.data.currentPage;
+            $scope.totalPages = result.data.page.totalPages;
+            $scope.currentPage = result.data.page.currentPage;
         }
         
         invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);

@@ -1,3 +1,4 @@
+/*global module*/
 module.exports = function (grunt) {
     'use strict';
 
@@ -99,8 +100,8 @@ module.exports = function (grunt) {
     });
 
     // Default task
-    grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'yuidoc']);
+    grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'yuidoc', 'copy:dev']);
     
-    grunt.registerTask('dev', ['default', 'copy:dev', 'http-server:dev']);
+    grunt.registerTask('dev', ['default', 'copy:dev']);
 
 };
