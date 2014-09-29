@@ -16,7 +16,7 @@ angular.module('wt-backoffice').constant('wtCoreConfig', {
             method: 'GET'
         },
         createUser: {
-            url: 'http://localhost:8080/api/user',
+            url: 'http://localhost:8080/api/users/create',
             method: 'POST'
         },
         updateUser: {

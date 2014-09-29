@@ -14,7 +14,7 @@ app.controller('userDetailsController', ['$scope', '$routeParams', '$window', 'i
             $scope.toastr.show(translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
             $scope.location.path('/users');
         }
-        
+
         invoker.invoke('user', operation, $scope.user, process.onStart, onSuccess, process.onError, process.onFinally);
     }
     
