@@ -46,7 +46,7 @@ app.controller('userDetailsController', ['$scope', '$routeParams', '$window', 'i
         }
         
         function onSuccess(result) {
-            $scope.user = result.data;
+            $scope.user = result.data.$$data;
         }
         
         invoker.invoke('user', 'getDetails', data, process.onStart, onSuccess, process.onError, process.onFinally);

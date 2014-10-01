@@ -288,7 +288,7 @@ app.controller('userDetailsController', ['$scope', '$routeParams', '$window', 'i
         }
         
         function onSuccess(result) {
-            $scope.user = result.data;
+            $scope.user = result.data.$$data;
         }
         
         invoker.invoke('user', 'getDetails', data, process.onStart, onSuccess, process.onError, process.onFinally);
@@ -337,9 +337,9 @@ app.controller('userListController', ['$scope', 'invoker', 'processHandler', fun
         }
 
         function onSuccess(result) {
-            $scope.users = result.data.list;
-            $scope.totalPages = result.data.page.totalPages;
-            $scope.currentPage = result.data.page.currentPage;
+            $scope.users = result.data.$$data.list;
+            $scope.totalPages = result.data.$$data.page.totalPages;
+            $scope.currentPage = result.data.$$data.page.currentPage;
         }
 
         invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);
