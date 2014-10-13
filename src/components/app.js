@@ -1,9 +1,9 @@
 /*global angular*/
-var app = angular.module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch']);
+var app = angular.module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch', 'angularFileUpload']);
 
 app.config(['$routeProvider', function ($routeProvider) {
     'use strict';
-    
+
     $routeProvider.when('/', {
         templateUrl: 'components/login/login.html',
         controller: 'loginController'
@@ -16,6 +16,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/user/:id', {
         templateUrl: 'components/user/userDetails.html',
         controller: 'userDetailsController'
+    }).when('/files/upload', {
+        templateUrl: 'components/files/upload.html',
+        controller: 'uploadController'
     }).otherwise({
         redirectTo: '/'
     });
@@ -23,6 +26,6 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.run(function ($http) {
     'use strict';
-    
+
     $http.defaults.headers.post["Content-Type"] = "application/json";
 });

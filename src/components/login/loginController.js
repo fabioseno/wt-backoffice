@@ -19,7 +19,7 @@ app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'auth
         
         function onSuccess(result) {
             authentication.sessionId = result.headers('SessionId');
-            $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.name), 'success');
+            $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.$$data.name), 'success');
             $scope.location.path('/users');
         }
         

@@ -66,13 +66,13 @@ table.table tr:nth-of-type(1) td {
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-  background-color: #f5fafc;
+    background-color: #f5fafc;
 }
 .table th.sortable {
-	cursor: pointer;
+    cursor: pointer;
 }
 .table th.sortable:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .table thead th {

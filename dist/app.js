@@ -1,9 +1,9 @@
 /*global angular*/
-var app = angular.module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch']);
+var app = angular.module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch', 'angularFileUpload']);
 
 app.config(['$routeProvider', function ($routeProvider) {
     'use strict';
-    
+
     $routeProvider.when('/', {
         templateUrl: 'components/login/login.html',
         controller: 'loginController'
@@ -16,6 +16,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/user/:id', {
         templateUrl: 'components/user/userDetails.html',
         controller: 'userDetailsController'
+    }).when('/files/upload', {
+        templateUrl: 'components/files/upload.html',
+        controller: 'uploadController'
     }).otherwise({
         redirectTo: '/'
     });
@@ -23,7 +26,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.run(function ($http) {
     'use strict';
-    
+
     $http.defaults.headers.post["Content-Type"] = "application/json";
 });
 /*global app*/
@@ -101,6 +104,46 @@ app.controller('rootController', ['$scope', '$rootScope', '$window', '$location'
     });
     
 }]);
+/*global app, angular*/
+app.controller('uploadController', ['$scope', '$upload', function ($scope, $upload) {
+    'use strict';
+
+    //    $scope.onFileSelect = function ($files) {
+    //        for (var i = 0; i < $files.length; i++) {
+    //            var file = $files[i];
+    //            $scope.upload = $upload.upload({
+    //                url: '/posts/upload/',
+    //                method: 'POST',                 
+    //                file: file,
+    //            }).progress(function(evt) {
+    //                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+    //            }).success(function(data, status, headers, config) {
+    //                // file is uploaded successfully
+    //                console.log(data);
+    //            });
+    //
+    //        }
+    //    };
+
+    $scope.upload = function ($files) {
+        var i = 0, file;
+
+        for (i = 0; i < $files.length; i += 1) {
+            file = $files[i];
+
+            $scope.upload = $upload.upload({
+                url: '/api/files/upload/',
+                method: 'POST',
+                file: file
+            }).progress(function (evt) {
+                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function (data, status, headers, config) {
+                // file is uploaded successfully
+                console.log(data);
+            });
+        }
+    };
+}]);
 /*global app, jsSHA*/
 /*jslint newcap: true */
 app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'authentication', 'processHandler', function ($scope, $q, invoker, translate, authentication, processHandler) {
@@ -122,7 +165,7 @@ app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'auth
         
         function onSuccess(result) {
             authentication.sessionId = result.headers('SessionId');
-            $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.name), 'success');
+            $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.$$data.name), 'success');
             $scope.location.path('/users');
         }
         
