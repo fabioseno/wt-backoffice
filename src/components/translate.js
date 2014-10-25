@@ -1,5 +1,5 @@
-/*global app */
-app.service('translate', function () {
+/*global angular */
+angular.module('wt-backoffice').service('translate', function () {
     'use strict';
     
     var terms = {
@@ -41,7 +41,7 @@ app.service('translate', function () {
     
 });
 
-app.filter('i18n', ['translate', function (translate) {
+angular.module('wt-backoffice').filter('i18n', ['translate', function (translate) {
     'use strict';
     
     return function (key, args) {

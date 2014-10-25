@@ -3,14 +3,14 @@
         <div class="row header">
             <h3>{{ 'LBL_USERS' | i18n }}</h3>
             <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                <input type="text" class="col-md-5 search" placeholder="{{ 'MSG_TYPE_SEARCH_TERM' | i18n }}" data-ng-model="searchTerm">
+                <input type="text" class="col-md-5 search" placeholder="{{ 'MSG_TYPE_SEARCH_TERM' | i18n }}" data-ng-model="vm.searchTerm">
                 <div class="ui-dropdown">
                     <div class="head">
                         {{ 'LBL_FILTER' | i18n }}
                     </div>
                 </div>
                 
-                <a data-ng-click="goTo('/user');" class="btn-flat success pull-right">
+                <a data-ng-click="base.goTo('/user');" class="btn-flat success pull-right">
                     <span>+</span>
                     {{ 'LBL_NEW_USER' | i18n }}
                 </a>
@@ -22,26 +22,26 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col-md-4 sortable" data-ng-click="sort('name')">{{ 'LBL_NAME' | i18n }}</th>
-                            <th class="col-md-4 sortable" data-ng-click="sort('email')">
+                            <th class="col-md-4 sortable" data-ng-click="vm.sort('name')">{{ 'LBL_NAME' | i18n }}</th>
+                            <th class="col-md-4 sortable" data-ng-click="vm.sort('email')">
                                 <span class="line"></span>
                                 {{ 'LBL_EMAIL' | i18n }}
                             </th>
-                            <th class="col-md-4 sortable" data-ng-click="sort('status')">
+                            <th class="col-md-4 sortable" data-ng-click="vm.sort('status')">
                                 <span class="line"></span>
                                 {{ 'LBL_STATUS' | i18n }}
                             </th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tr data-ng-repeat="user in users | filter : searchTerm" data-ng-click="goTo('/user/{{ user.id }}')">
+                    <tr data-ng-repeat="user in vm.users | filter : searchTerm" data-ng-click="base.goTo('/user/{{ user.id }}')">
                         <td data-ng-bind="user.name"></td>
                         <td data-ng-bind="user.email"></td>
                         <td data-ng-bind="user.status"></td>
                         <td></td>
                     </tr>
                 </table>
-                <data-pager class="pull-right" current-page="{{ currentPage }}" total-pages="{{ totalPages }}" action="showUsers(page)"></data-pager>
+                <data-pager class="pull-right" current-page="{{ vm.currentPage }}" total-pages="{{ vm.totalPages }}" action="vm.showUsers(page)"></data-pager>
             </div>
         </div>
     </div>

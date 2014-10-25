@@ -1,5 +1,5 @@
-/*global app, angular*/
-app.controller('uploadController', ['$scope', '$upload', function ($scope, $upload) {
+/*global angular*/
+angular.module('wt-backoffice').controller('upload', ['$scope', '$upload', function ($scope, $upload) {
     'use strict';
 
     //    $scope.onFileSelect = function ($files) {

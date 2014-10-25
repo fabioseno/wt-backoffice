@@ -1,36 +1,81 @@
 /*global angular*/
-var app = angular.module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch', 'angularFileUpload']);
+angular
+    .module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch', 'angularFileUpload'])
 
-app.config(['$routeProvider', function ($routeProvider) {
-    'use strict';
+    .config(['$routeProvider', function ($routeProvider) {
+        'use strict';
 
-    $routeProvider.when('/', {
-        templateUrl: 'components/login/login.html',
-        controller: 'loginController'
-    }).when('/users', {
-        templateUrl: 'components/user/userList.html',
-        controller: 'userListController'
-    }).when('/user', {
-        templateUrl: 'components/user/userDetails.html',
-        controller: 'userDetailsController'
-    }).when('/user/:id', {
-        templateUrl: 'components/user/userDetails.html',
-        controller: 'userDetailsController'
-    }).when('/files/upload', {
-        templateUrl: 'components/files/upload.html',
-        controller: 'uploadController'
-    }).otherwise({
-        redirectTo: '/'
+        $routeProvider.when('/', {
+            templateUrl: 'components/login/login.html',
+            controller: 'login',
+            controllerAs: 'vm'
+        }).when('/users', {
+            templateUrl: 'components/user/userList.html',
+            controller: 'userList',
+            controllerAs: 'vm'
+        }).when('/user', {
+            templateUrl: 'components/user/userDetails.html',
+            controller: 'userDetails',
+            controllerAs: 'vm'
+        }).when('/user/:id', {
+            templateUrl: 'components/user/userDetails.html',
+            controller: 'userDetails',
+            controllerAs: 'vm'
+        }).when('/files/upload', {
+            templateUrl: 'components/files/upload.html',
+            controller: 'upload',
+            controllerAs: 'vm'
+        }).otherwise({
+            redirectTo: '/'
+        });
+    }])
+
+    .run(function ($http) {
+        'use strict';
+
+        $http.defaults.headers.post["Content-Type"] = "application/json";
     });
-}]);
-
-app.run(function ($http) {
+/*global angular*/
+(function () {
     'use strict';
 
-    $http.defaults.headers.post["Content-Type"] = "application/json";
-});
-/*global app*/
-app.factory('processHandler', ['toastr', 'translate', function (toastr, translate) {
+    function Hub($rootScope, $location, $q, $routeParams, $window, invoker, eventHub, translate, processHandler, toastr) {
+        
+        this.$location = $location;
+        
+        this.$q = $q;
+        
+        this.$routeParams = $routeParams;
+        
+        this.$window = $window;
+        
+        this.invoker = invoker;
+        
+        this.eventHub = eventHub;
+        
+        this.translate = translate;
+        
+        this.processHandler = processHandler;
+        
+        this.toastr = toastr;
+        
+        $rootScope.$on('APPLICATION_ERROR', function (event, data) {
+            toastr.show(data, 'error');
+        });
+
+        $rootScope.$on('UNAUTHORIZED', function (event, data) {
+            toastr.show(translate.getTerm('MSG_ACCESS_DENIED'), 'error');
+            $location.path('/login');
+        });
+    }
+
+    Hub.$inject = ['$rootScope', '$location', '$q', '$routeParams', '$window', 'invoker', 'eventHub', 'translate', 'processHandler', 'toastr'];
+
+    angular.module('wt-backoffice').service('hub', Hub);
+
+}());
+/*global angular*/
+angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate', function (toastr, translate) {
     'use strict';
     
     return function (scope, loaderName) {
@@ -76,36 +121,25 @@ app.factory('processHandler', ['toastr', 'translate', function (toastr, translat
         };
     };
 }]);
-/*global app*/
-app.controller('rootController', ['$scope', '$rootScope', '$window', '$location', 'eventHub', 'toastr', 'translate', function ($scope, $rootScope, $window, $location, eventHub, toastr, translate) {
+/*global angular*/
+(function () {
     'use strict';
-    
-    $scope.location = $location;
-    
-    $scope.eventHub = eventHub;
-    
-    $scope.toastr = toastr;
-    
-    $scope.goBack = function () {
-        $window.history.back();
-    };
-    
-    $scope.goTo = function (url) {
-        $location.path(url);
-    };
-    
-    $rootScope.$on('APPLICATION_ERROR', function (event, data) {
-        toastr.show(data, 'error');
-    });
-    
-    $rootScope.$on('UNAUTHORIZED', function (event, data) {
-        $scope.toastr.show(translate.getTerm('MSG_ACCESS_DENIED'), 'error');
-        $location.path('/login');
-    });
-    
-}]);
-/*global app, angular*/
-app.controller('uploadController', ['$scope', '$upload', function ($scope, $upload) {
+
+    function Root($location) {
+        var vm = this;
+        
+        vm.goTo = function (url) {
+            $location.path(url);
+        };
+    }
+
+    Root.$inject = ['$location'];
+
+    angular.module('wt-backoffice').controller('root', Root);
+
+}());
+/*global angular*/
+angular.module('wt-backoffice').controller('upload', ['$scope', '$upload', function ($scope, $upload) {
     'use strict';
 
     //    $scope.onFileSelect = function ($files) {
@@ -144,95 +178,111 @@ app.controller('uploadController', ['$scope', '$upload', function ($scope, $uplo
         }
     };
 }]);
-/*global app, jsSHA*/
-/*jslint newcap: true */
-app.controller('loginController', ['$scope', '$q', 'invoker', 'translate', 'authentication', 'processHandler', function ($scope, $q, invoker, translate, authentication, processHandler) {
+/*global angular*/
+(function () {
     'use strict';
-    
-    var process = processHandler($scope, 'loading');
-    
-    $scope.email = 'fabioseno@gmail.com';
-    $scope.password = 'senha';
-    $scope.loading = process.loading;
-    
-    $scope.authenticate = function () {
-        var shaObj = new jsSHA($scope.password, "TEXT"),
-            hash = shaObj.getHMAC($scope.email, "TEXT", "SHA-1", "B64"),
-            data = {
-                email: $scope.email,
-                password: hash
-            };
-        
-        function onSuccess(result) {
-            authentication.sessionId = result.headers('SessionId');
-            $scope.toastr.show(translate.getTerm('MSG_ACCESS GRANTED', result.data.$$data.name), 'success');
-            $scope.location.path('/users');
-        }
-        
-        function onError(error) {
-            $scope.toastr.show(translate.getTerm('MSG_OPERATION_FAIL'), 'error');
-        }
-        
-        invoker.invoke('authentication', 'authenticate', data, process.onStart, onSuccess, onError, process.onFinally);
-        
-    };
-}]);
-/*global app*/
-app.controller('menuController', ['$scope', '$location', function ($scope, $location) {
-    'use strict';
-    
-    $scope.selectedItem = {};
-    
-    $scope.menuItems = [
-        {
-            id: 'home',
-            'class': 'fa fa-home fa-lg fa-fw',
-            name: 'Home',
-            link: '/users'
-        },
-        {
-            id: 'users',
-            'class': 'fa fa-users fa-lg fa-fw',
-            name: 'Users',
-            link: '',
-            items: [
-                {
-                    id: 'userList',
-                    name: 'User list',
-                    link: '/users'
-                },
-                {
-                    id: 'newUser',
-                    name: 'New user',
-                    link: '/user'
-                }
-            ]
-        }
-    ];
-    
-    $scope.selectItem = function (menuItem) {
-        if (menuItem.items && menuItem.items.length > 0) {
-            menuItem.selected = !!!menuItem.selected;
-            
-            if (menuItem.selected) {
-                $scope.selectedItem = menuItem;
+
+    function Menu($location) {
+        var vm = this;
+
+        vm.selectedItem = {};
+        vm.menuItems = [
+            {
+                id: 'home',
+                'class': 'fa fa-home fa-lg fa-fw',
+                name: 'Home',
+                link: '/users'
+            },
+            {
+                id: 'users',
+                'class': 'fa fa-users fa-lg fa-fw',
+                name: 'Users',
+                link: '',
+                items: [
+                    {
+                        id: 'userList',
+                        name: 'User list',
+                        link: '/users'
+                    },
+                    {
+                        id: 'newUser',
+                        name: 'New user',
+                        link: '/user'
+                    }
+                ]
             }
-            
-        } else if (menuItem.link) {
-            $scope.selectedItem = menuItem;
-            $location.path(menuItem.link);
-        }
-    };
-}]);
-app.directive('', function () {
+        ];
+        vm.selectItem = function (menuItem) {
+            if (menuItem.items && menuItem.items.length > 0) {
+                menuItem.selected = !!!menuItem.selected;
+
+                if (menuItem.selected) {
+                    vm.selectedItem = menuItem;
+                }
+
+            } else if (menuItem.link) {
+                vm.selectedItem = menuItem;
+                $location.path(menuItem.link);
+            }
+        };
+    }
+
+    Menu.$inject = ['$location'];
+
+    angular.module('wt-backoffice').controller('menu', Menu);
+
+}());
+angular.module('wt-backoffice').directive('', function () {
     'use strict';
     
     return {
         
     };
 });
-/*global app */
-app.service('translate', function () {
+/*global angular, jsSHA*/
+(function () {
+    'use strict';
+
+    function Login(hub, authentication) {
+
+        var vm = this,
+            process = hub.processHandler(vm, 'loading');
+
+        vm.email = 'fabioseno@gmail.com';
+        vm.password = 'senha';
+        vm.loading = process.loading;
+
+        vm.authenticate = function () {
+            
+            /*jslint newcap: true */
+            var shaObj = new jsSHA(vm.password, "TEXT"),
+                hash = shaObj.getHMAC(vm.email, "TEXT", "SHA-1", "B64"),
+                data = {
+                    email: vm.email,
+                    password: hash
+                };
+
+            function onSuccess(result) {
+                authentication.sessionId = result.headers('SessionId');
+                hub.toastr.show(hub.translate.getTerm('MSG_ACCESS GRANTED', result.data.$$data.name), 'success');
+                hub.$location.path('/users');
+            }
+
+            function onError(error) {
+                hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_FAIL'), 'error');
+            }
+
+            hub.invoker.invoke('authentication', 'authenticate', data, process.onStart, onSuccess, onError, process.onFinally);
+
+        };
+    }
+
+    Login.$inject = ['hub', 'authentication'];
+
+    angular.module('wt-backoffice').controller('login', Login);
+}());
+/*global angular */
+angular.module('wt-backoffice').service('translate', function () {
     'use strict';
     
     var terms = {
@@ -274,7 +324,7 @@ app.service('translate', function () {
     
 });
 
-app.filter('i18n', ['translate', function (translate) {
+angular.module('wt-backoffice').filter('i18n', ['translate', function (translate) {
     'use strict';
     
     return function (key, args) {
@@ -283,112 +333,137 @@ app.filter('i18n', ['translate', function (translate) {
     };
     
 }]);
-/*global app*/
-app.controller('userDetailsController', ['$scope', '$routeParams', '$window', 'invoker', 'translate', 'processHandler', function ($scope, $routeParams, $window, invoker, translate, processHandler) {
-    'use strict';
-    
-    var process = processHandler($scope, 'loading');
-    
-    $scope.user = {};
-    $scope.loading = process.loading;
-    $scope.saveLabel = translate.getTerm('LBL_CREATE');
-    $scope.isNew = true;
-    
-    function execute(operation) {
-        function onSuccess(result) {
-            $scope.toastr.show(translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
-            $scope.location.path('/users');
-        }
-
-        invoker.invoke('user', operation, $scope.user, process.onStart, onSuccess, process.onError, process.onFinally);
-    }
-    
-    $scope.save = function () {
-        var operation = 'updateUser';
-        
-        if ($scope.isNew) {
-            operation = 'createUser';
-        }
-        
-        execute(operation);
-    };
-    
-    $scope.remove = function () {
-        if ($window.confirm(translate.getTerm('MSG_CONFIRM_OPERATION'))) {
-            execute('removeUser');
-        }
-    };
-    
-    $scope.showUserDetails = function (id) {
-        
-        var data = {id: id};
-        
-        if (id) {
-            $scope.isNew = false;
-            $scope.saveLabel = translate.getTerm('LBL_UPDATE');
-        } else {
-            return;
-        }
-        
-        function onSuccess(result) {
-            $scope.user = result.data.$$data;
-        }
-        
-        invoker.invoke('user', 'getDetails', data, process.onStart, onSuccess, process.onError, process.onFinally);
-        
-    };
-    
-    $scope.showUserDetails($routeParams.id);
-    
-}]);
-/*global app*/
-app.controller('userListController', ['$scope', 'invoker', 'processHandler', function ($scope, invoker, processHandler) {
+/*global angular*/
+(function () {
     'use strict';
 
-    var process = processHandler($scope, 'loading');
+    function UserDetails(hub) {
 
-    $scope.users = [];
-    $scope.currentPage = 1;
-    $scope.sortField = {
-        name: 1
-    };
-    $scope.loading = process.loading;
+        var vm = this,
+            process = hub.processHandler(vm, 'loading');
 
-    $scope.sort = function (field) {
-        if (!$scope.sortField[field]) {
-            $scope.sortField = {};
-            $scope.sortField[field] = 1;
-        } else {
-            $scope.sortField[field] = $scope.sortField[field] === 1 ? -1 : 1;
+        vm.user = {};
+        vm.loading = process.loading;
+        vm.saveLabel = hub.translate.getTerm('LBL_CREATE');
+        vm.isNew = true;
+
+        function execute(operation) {
+            function onSuccess(result) {
+                hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
+                vm.goBack();
+            }
+
+            hub.invoker.invoke('user', operation, vm.user, process.onStart, onSuccess, process.onError, process.onFinally);
         }
 
-        $scope.showUsers($scope.currentPage);
-    };
+        vm.save = function () {
+            var operation = 'updateUser';
 
-    $scope.showUsers = function (page) {
+            if (vm.isNew) {
+                operation = 'createUser';
+            }
 
-        var data = {
-            filter: {},
-            page: {
-                pageSize: 2,
-                currentPage: page
+            execute(operation);
+        };
+
+        vm.remove = function () {
+            if (hub.$window.confirm(hub.translate.getTerm('MSG_CONFIRM_OPERATION'))) {
+                execute('removeUser');
             }
         };
 
-        if ($scope.sortField) {
-            data.sort = $scope.sortField;
-        }
+        vm.showUserDetails = function (id) {
 
-        function onSuccess(result) {
-            $scope.users = result.data.$$data.list;
-            $scope.totalPages = result.data.$$data.page.totalPages;
-            $scope.currentPage = result.data.$$data.page.currentPage;
-        }
+            var data = {id: id};
 
-        invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);
+            if (id) {
+                vm.isNew = false;
+                vm.saveLabel = hub.translate.getTerm('LBL_UPDATE');
+            } else {
+                return;
+            }
 
-    };
+            function onSuccess(result) {
+                vm.user = result.data.$$data;
+                vm.user.password = ' ';
+                vm.user.passwordConfirmation = ' ';
+            }
 
-    $scope.showUsers(1);
+            hub.invoker.invoke('user', 'getDetails', data, process.onStart, onSuccess, process.onError, process.onFinally);
 
-}]);
+        };
+
+        vm.goBack = function () {
+            hub.$location.path('/users');
+        };
+
+        vm.showUserDetails(hub.$routeParams.id);
+
+    }
+    
+    UserDetails.$inject = ['hub'];
+
+    angular.module('wt-backoffice').controller('userDetails', UserDetails);
+    
+}());
+/*global angular*/
+(function () {
+    'use strict';
+
+    function UserList(hub) {
+        
+        var vm = this,
+            process = hub.processHandler(vm, 'loading');
+
+        vm.users = [];
+        vm.currentPage = 1;
+        vm.sortField = {
+            name: 1
+        };
+
+        vm.loading = process.loading;
+
+        vm.sort = function (field) {
+            if (!vm.sortField[field]) {
+                vm.sortField = {};
+                vm.sortField[field] = 1;
+            } else {
+                vm.sortField[field] = vm.sortField[field] === 1 ? -1 : 1;
+            }
+
+            vm.showUsers(vm.currentPage);
+        };
+
+        vm.showUsers = function (page) {
+
+            var data = {
+                filter: {},
+                page: {
+                    pageSize: 2,
+                    currentPage: page
+                }
+            };
+
+            if (vm.sortField) {
+                data.sort = vm.sortField;
+            }
+
+            function onSuccess(result) {
+                vm.users = result.data.$$data.list;
+                vm.totalPages = result.data.$$data.page.totalPages;
+                vm.currentPage = result.data.$$data.page.currentPage;
+            }
+
+            hub.invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);
+
+        };
+
+        vm.showUsers(1);
+
+    }
+
+    UserList.$inject = ['hub'];
+
+    angular.module('wt-backoffice').controller('userList', UserList);
+    
+}());

@@ -1,12 +1,12 @@
-<ul id="side-menu" data-ng-controller="menuController">
-    <li class="menu-item" data-ng-class="{ 'active' : selectedItem.id === menuItem.id }" data-ng-repeat="menuItem in menuItems">
-        <a data-ng-click="selectItem(menuItem)">
+<ul id="side-menu" data-ng-controller="menu as vm">
+    <li class="menu-item" data-ng-class="{ 'active' : vm.selectedItem.id === menuItem.id }" data-ng-repeat="menuItem in vm.menuItems">
+        <a data-ng-click="vm.selectItem(menuItem)">
             <i data-ng-class="menuItem.class"></i><span data-ng-bind="menuItem.name"></span>
             <i data-ng-show="menuItem && menuItem.items.length > 0" class="fa fa-chevron-down"></i> 
         </a>
         <ul class="sub-menu" data-ng-show="menuItem.selected">
-            <li data-ng-repeat="item in menuItem.items" data-ng-class="{ active : selectedItem.id === item.id}">
-                <a data-ng-bind="item.name" data-ng-click="selectItem(item)"></a>
+            <li data-ng-repeat="item in menuItem.items" data-ng-class="{ active : vm.selectedItem.id === item.id}">
+                <a data-ng-bind="item.name" data-ng-click="vm.selectItem(item)"></a>
             </li>
 <!--            <li><a href="#/user">New user</a></li>-->
         </ul>

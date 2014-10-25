@@ -1,31 +1,37 @@
 /*global angular*/
-var app = angular.module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch', 'angularFileUpload']);
+angular
+    .module('wt-backoffice', ['wt-core', 'wt-ui', 'ngRoute', 'ngTouch', 'angularFileUpload'])
 
-app.config(['$routeProvider', function ($routeProvider) {
-    'use strict';
+    .config(['$routeProvider', function ($routeProvider) {
+        'use strict';
 
-    $routeProvider.when('/', {
-        templateUrl: 'components/login/login.html',
-        controller: 'loginController'
-    }).when('/users', {
-        templateUrl: 'components/user/userList.html',
-        controller: 'userListController'
-    }).when('/user', {
-        templateUrl: 'components/user/userDetails.html',
-        controller: 'userDetailsController'
-    }).when('/user/:id', {
-        templateUrl: 'components/user/userDetails.html',
-        controller: 'userDetailsController'
-    }).when('/files/upload', {
-        templateUrl: 'components/files/upload.html',
-        controller: 'uploadController'
-    }).otherwise({
-        redirectTo: '/'
+        $routeProvider.when('/', {
+            templateUrl: 'components/login/login.html',
+            controller: 'login',
+            controllerAs: 'vm'
+        }).when('/users', {
+            templateUrl: 'components/user/userList.html',
+            controller: 'userList',
+            controllerAs: 'vm'
+        }).when('/user', {
+            templateUrl: 'components/user/userDetails.html',
+            controller: 'userDetails',
+            controllerAs: 'vm'
+        }).when('/user/:id', {
+            templateUrl: 'components/user/userDetails.html',
+            controller: 'userDetails',
+            controllerAs: 'vm'
+        }).when('/files/upload', {
+            templateUrl: 'components/files/upload.html',
+            controller: 'upload',
+            controllerAs: 'vm'
+        }).otherwise({
+            redirectTo: '/'
+        });
+    }])
+
+    .run(function ($http) {
+        'use strict';
+
+        $http.defaults.headers.post["Content-Type"] = "application/json";
     });
-}]);
-
-app.run(function ($http) {
-    'use strict';
-
-    $http.defaults.headers.post["Content-Type"] = "application/json";
-});

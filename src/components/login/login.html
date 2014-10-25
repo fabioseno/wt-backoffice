@@ -8,9 +8,9 @@
             <form class="form-signin" role="form">
                 <div data-loader="loading"></div>
                 <h2 class="form-signin-heading">{{ 'LBL_LOGIN' | i18n }}</h2>
-                <input class="form-control" type="text" placeholder="{{ 'LBL_EMAIL' | i18n }}" data-ng-model="email">
-                <input class="form-control" type="password" placeholder="{{ 'LBL_PASSWORD' | i18n }}" data-ng-model="password">
-                <button class="btn btn-large btn-primary" data-ng-click="authenticate()">{{ 'LBL_ENTER' | i18n }}</button>
+                <input class="form-control" type="text" placeholder="{{ 'LBL_EMAIL' | i18n }}" data-ng-model="vm.email">
+                <input class="form-control" type="password" placeholder="{{ 'LBL_PASSWORD' | i18n }}" data-ng-model="vm.password">
+                <button class="btn btn-large btn-primary" data-ng-click="vm.authenticate()">{{ 'LBL_ENTER' | i18n }}</button>
             </div>
         </div>
     </div>    

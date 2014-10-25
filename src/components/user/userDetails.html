@@ -6,47 +6,47 @@
             </div>                
         </div>
         <div class="row form-wrapper">
-<!--            <div data-loader="loading"></div>-->
+            <div data-loader="vm.loading"></div>
             <div class="col-md-9 with-sidebar">
                 <form name="form" class="form-horizontal" role="form">
                     <div class="form-group">
                         <label for="inputName" class="col-md-2 control-label">{{ 'LBL_NAME' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="inputName" data-ng-model="user.name" required>
-                            <span ng-show="form.inputName.$error.required && form.inputName.$dirty">Campo é obrigatório!</span>
+                            <input type="text" class="form-control" name="inputName" data-ng-model="vm.user.name" required>
+                            <span data-ng-show="form.inputName.$error.required && form.inputName.$dirty">Campo é obrigatório!</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail" class="col-md-2 control-label">{{ 'LBL_EMAIL' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="email" class="form-control" name="inputEmail" data-ng-model="user.email" required>
-                            <span ng-show="form.inputEmail.$error.required && form.inputEmail.$dirty">required</span>
-                            <span ng-show="!form.inputEmail.$error.required && form.inputEmail.$error.email && form.inputEmail.$dirty">invalid email</span>
+                            <input type="email" class="form-control" name="inputEmail" data-ng-model="vm.user.email" required>
+                            <span data-ng-show="form.inputEmail.$error.required && form.inputEmail.$dirty">required</span>
+                            <span data-ng-show="!form.inputEmail.$error.required && form.inputEmail.$error.email && form.inputEmail.$dirty">invalid email</span>
                         </div>
                     </div>
-                    <div class="form-group" data-ng-show="isNew">
-                        <label for="inputEmail" class="col-md-2 control-label">{{ 'LBL_PASSWORD' | i18n }}</label>
+                    <div class="form-group" data-ng-show="vm.isNew">
+                        <label for="inputPassword" class="col-md-2 control-label">{{ 'LBL_PASSWORD' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="password" class="form-control" name="inputPassword" data-ng-model="user.password" required>
+                            <input type="password" class="form-control" name="inputPassword" data-ng-model="vm.user.password" data-ng-disabled="!vm.isNew" required>
                         </div>
                     </div>
-                    <div class="form-group" data-ng-show="isNew">
-                        <label for="inputEmail" class="col-md-2 control-label">{{ 'LBL_PASSWORD_CONFIRMATION' | i18n }}</label>
+                    <div class="form-group" data-ng-show="vm.isNew">
+                        <label for="inputPasswordConfirmation" class="col-md-2 control-label">{{ 'LBL_PASSWORD_CONFIRMATION' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="password" class="form-control" name="inputPassword" data-ng-model="user.passwordConfirmation" required>
+                            <input type="password" class="form-control" name="inputPasswordConfirmation" data-ng-model="vm.user.passwordConfirmation" data-ng-disabled="!vm.isNew" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputStatus" class="col-md-2 control-label">{{ 'LBL_STATUS' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="inputStatus" data-ng-model="user.status" required>
+                            <input type="text" class="form-control" name="inputStatus" data-ng-model="vm.user.status" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-8">
-                            <button type="submit" class="btn btn-default" data-ng-click="save()" data-ng-disabled="!form.$valid" data-ng-bind="saveLabel"></button>
-                            <button type="submit" class="btn btn-default" data-ng-click="remove()" hide data-ng-hide="isNew">{{ 'LBL_DELETE' | i18n }}</button>
-                            <button type="submit" class="btn btn-default" data-ng-click="goBack()">{{ 'LBL_CANCEL' | i18n }}</button>
+                            <button type="submit" class="btn btn-default" data-ng-click="vm.save()" data-ng-disabled="!form.$valid" data-ng-bind="vm.saveLabel"></button>
+                            <button type="submit" class="btn btn-default" data-ng-click="vm.remove()" hide data-ng-hide="isNew">{{ 'LBL_DELETE' | i18n }}</button>
+                            <button type="submit" class="btn btn-default" data-ng-click="vm.goBack()">{{ 'LBL_CANCEL' | i18n }}</button>
                         </div>
                     </div>
                 </form>

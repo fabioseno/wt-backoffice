@@ -1,5 +1,5 @@
-/*global app*/
-app.factory('processHandler', ['toastr', 'translate', function (toastr, translate) {
+/*global angular*/
+angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate', function (toastr, translate) {
     'use strict';
     
     return function (scope, loaderName) {
