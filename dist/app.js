@@ -39,6 +39,44 @@ angular
 (function () {
     'use strict';
 
+    function Form(hub) {
+
+        this.getListMetadata = function (page, sortField) {
+            var data = {
+                filter: {},
+                page: {
+                    pageSize: 2,
+                    currentPage: page
+                }
+            };
+
+            if (sortField) {
+                data.sort = sortField;
+            }
+        };
+
+        this.sort = function (sortPreferences, field, listCallback, currentPage) {
+            if (!sortPreferences[field]) {
+                sortPreferences = {};
+                sortPreferences[field] = 1;
+            } else {
+                sortPreferences[field] = sortPreferences[field] === 1 ? -1 : 1;
+            }
+
+            listCallback(currentPage);
+        };
+
+    }
+
+    Form.$inject = ['hub'];
+
+    angular.module('wt-backoffice').service('form', Form);
+
+}());
+/*global angular*/
+(function () {
+    'use strict';
+
     function Hub($rootScope, $location, $q, $routeParams, $window, invoker, eventHub, translate, processHandler, toastr) {
         
         this.$location = $location;
@@ -263,7 +301,7 @@ angular.module('wt-backoffice').directive('', function () {
                 };
 
             function onSuccess(result) {
-                authentication.sessionId = result.headers('SessionId');
+                authentication.setSessionId(result.headers('X-SessionId'));
                 hub.toastr.show(hub.translate.getTerm('MSG_ACCESS GRANTED', result.data.$$data.name), 'success');
                 hub.$location.path('/users');
             }
@@ -348,9 +386,17 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
         vm.isNew = true;
 
         function execute(operation) {
+            /*jslint newcap: true */
+            var shaObj = new jsSHA(vm.user.password, "TEXT"),
+                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64");
+
             function onSuccess(result) {
                 hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
                 vm.goBack();
+            }
+
+            if (operation === 'createUser') {
+                vm.user.password = hash;
             }
 
             hub.invoker.invoke('user', operation, vm.user, process.onStart, onSuccess, process.onError, process.onFinally);
@@ -400,17 +446,17 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
         vm.showUserDetails(hub.$routeParams.id);
 
     }
-    
+
     UserDetails.$inject = ['hub'];
 
     angular.module('wt-backoffice').controller('userDetails', UserDetails);
-    
+
 }());
 /*global angular*/
 (function () {
     'use strict';
 
-    function UserList(hub) {
+    function UserList(hub, form) {
         
         var vm = this,
             process = hub.processHandler(vm, 'loading');
@@ -424,29 +470,10 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
         vm.loading = process.loading;
 
         vm.sort = function (field) {
-            if (!vm.sortField[field]) {
-                vm.sortField = {};
-                vm.sortField[field] = 1;
-            } else {
-                vm.sortField[field] = vm.sortField[field] === 1 ? -1 : 1;
-            }
-
-            vm.showUsers(vm.currentPage);
+            form.sort(vm.sortField, field, vm.showUsers, vm.currentPage);
         };
 
         vm.showUsers = function (page) {
-
-            var data = {
-                filter: {},
-                page: {
-                    pageSize: 2,
-                    currentPage: page
-                }
-            };
-
-            if (vm.sortField) {
-                data.sort = vm.sortField;
-            }
 
             function onSuccess(result) {
                 vm.users = result.data.$$data.list;
@@ -454,7 +481,7 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
                 vm.currentPage = result.data.$$data.page.currentPage;
             }
 
-            hub.invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);
+            hub.invoker.invoke('user', 'getList', form.getListMetadata(page, vm.sortField), process.onStart, onSuccess, process.onError, process.onFinally);
 
         };
 
@@ -462,7 +489,7 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
 
     }
 
-    UserList.$inject = ['hub'];
+    UserList.$inject = ['hub', 'form'];
 
     angular.module('wt-backoffice').controller('userList', UserList);
     

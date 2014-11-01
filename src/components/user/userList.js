@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    function UserList(hub) {
+    function UserList(hub, form) {
         
         var vm = this,
             process = hub.processHandler(vm, 'loading');
@@ -16,29 +16,10 @@
         vm.loading = process.loading;
 
         vm.sort = function (field) {
-            if (!vm.sortField[field]) {
-                vm.sortField = {};
-                vm.sortField[field] = 1;
-            } else {
-                vm.sortField[field] = vm.sortField[field] === 1 ? -1 : 1;
-            }
-
-            vm.showUsers(vm.currentPage);
+            form.sort(vm.sortField, field, vm.showUsers, vm.currentPage);
         };
 
         vm.showUsers = function (page) {
-
-            var data = {
-                filter: {},
-                page: {
-                    pageSize: 2,
-                    currentPage: page
-                }
-            };
-
-            if (vm.sortField) {
-                data.sort = vm.sortField;
-            }
 
             function onSuccess(result) {
                 vm.users = result.data.$$data.list;
@@ -46,7 +27,7 @@
                 vm.currentPage = result.data.$$data.page.currentPage;
             }
 
-            hub.invoker.invoke('user', 'getList', data, process.onStart, onSuccess, process.onError, process.onFinally);
+            hub.invoker.invoke('user', 'getList', form.getListMetadata(page, vm.sortField), process.onStart, onSuccess, process.onError, process.onFinally);
 
         };
 
@@ -54,7 +35,7 @@
 
     }
 
-    UserList.$inject = ['hub'];
+    UserList.$inject = ['hub', 'form'];
 
     angular.module('wt-backoffice').controller('userList', UserList);
     

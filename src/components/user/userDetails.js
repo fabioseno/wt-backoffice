@@ -13,9 +13,17 @@
         vm.isNew = true;
 
         function execute(operation) {
+            /*jslint newcap: true */
+            var shaObj = new jsSHA(vm.user.password, "TEXT"),
+                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64");
+
             function onSuccess(result) {
                 hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
                 vm.goBack();
+            }
+
+            if (operation === 'createUser') {
+                vm.user.password = hash;
             }
 
             hub.invoker.invoke('user', operation, vm.user, process.onStart, onSuccess, process.onError, process.onFinally);
@@ -65,9 +73,9 @@
         vm.showUserDetails(hub.$routeParams.id);
 
     }
-    
+
     UserDetails.$inject = ['hub'];
 
     angular.module('wt-backoffice').controller('userDetails', UserDetails);
-    
+
 }());
