@@ -3,9 +3,9 @@ angular.module('wt-backoffice').service('translate', function () {
     'use strict';
     
     var terms = {
-        "MSG_ACCESS_DENIED": "Acesso negado!",
         "MSG_ACCESS GRANTED": "Acesso permitido!<br />Bem-vindo, {0}",
         "MSG_CONFIRM_OPERATION": "Confirma a operação?",
+        "MSG_INVALID_USER_PASSWORD": "Usuário ou senha inválidos!",
         "MSG_OPERATION_FAIL": "Ocorreu um erro durante a operação.<br />Por favor tente novamente!",
         "MSG_OPERATION_SUCCESS": "Operação realizada com sucesso!",
         "MSG_TYPE_SEARCH_TERM": "Digite um termo de busca...",

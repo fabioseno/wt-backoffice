@@ -28,7 +28,7 @@
             }
 
             function onError(error) {
-                hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_FAIL'), 'error');
+                hub.toastr.show(hub.translate.getTerm('MSG_INVALID_USER_PASSWORD'), 'error');
             }
 
             hub.invoker.invoke('authentication', 'authenticate', data, process.onStart, onSuccess, onError, process.onFinally);

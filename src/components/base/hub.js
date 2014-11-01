@@ -27,7 +27,6 @@
         });
 
         $rootScope.$on('UNAUTHORIZED', function (event, data) {
-            toastr.show(translate.getTerm('MSG_ACCESS_DENIED'), 'error');
             $location.path('/login');
         });
     }
