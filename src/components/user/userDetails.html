@@ -27,13 +27,13 @@
                     <div class="form-group" data-ng-show="vm.isNew">
                         <label for="inputPassword" class="col-md-2 control-label">{{ 'LBL_PASSWORD' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="password" class="form-control" name="inputPassword" data-ng-model="vm.user.password" data-ng-disabled="!vm.isNew" required>
+                            <input type="password" class="form-control" id="inputPassword" data-ng-model="vm.user.password" data-ng-disabled="!vm.isNew" required>
                         </div>
                     </div>
                     <div class="form-group" data-ng-show="vm.isNew">
                         <label for="inputPasswordConfirmation" class="col-md-2 control-label">{{ 'LBL_PASSWORD_CONFIRMATION' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="password" class="form-control" name="inputPasswordConfirmation" data-ng-model="vm.user.passwordConfirmation" data-ng-disabled="!vm.isNew" required>
+                            <input type="password" class="form-control" name="inputPasswordConfirmation" data-ng-model="vm.user.passwordConfirmation" data-wt-match="inputPassword" data-ng-disabled="!vm.isNew" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -46,6 +46,7 @@
                         <div class="col-md-offset-2 col-md-8">
                             <button type="submit" class="btn btn-default" data-ng-click="vm.save()" data-ng-disabled="!form.$valid" data-ng-bind="vm.saveLabel"></button>
                             <button type="submit" class="btn btn-default" data-ng-click="vm.remove()" hide data-ng-hide="isNew">{{ 'LBL_DELETE' | i18n }}</button>
+                            <button type="submit" class="btn btn-default" data-ng-click="vm.resetPassword()" hide data-ng-hide="isNew">{{ 'LBL_RESET_PASSWORD' | i18n }}</button>
                             <button type="submit" class="btn btn-default" data-ng-click="vm.goBack()">{{ 'LBL_CANCEL' | i18n }}</button>
                         </div>
                     </div>
@@ -53,5 +54,4 @@
             </div>
         </div>    
     </div>
-</div>
 </div>

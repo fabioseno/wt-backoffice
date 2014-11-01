@@ -30,6 +30,10 @@ angular.module('wt-backoffice').constant('wtCoreConfig', {
         removeUser: {
             url: 'http://localhost:8080/api/user/:id',
             method: 'DELETE'
+        },
+        resetPassword: {
+            url: 'http://localhost:8080/api/user/resetPassword/:id',
+            method: 'POST'
         }
     }
 });

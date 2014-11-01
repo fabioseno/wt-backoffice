@@ -21,6 +21,10 @@ angular
             templateUrl: 'components/user/userDetails.html',
             controller: 'userDetails',
             controllerAs: 'vm'
+        }).when('/user/resetPassword/:id', {
+            templateUrl: 'components/user/resetPassword.html',
+            controller: 'resetPassword',
+            controllerAs: 'vm'
         }).when('/files/upload', {
             templateUrl: 'components/files/upload.html',
             controller: 'upload',
@@ -372,8 +376,10 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_LOGIN": "Login",
         "LBL_NAME": "Name",
         "LBL_NEW_USER": "Novo usuário",
+        "LBL_NEW_PASSWORD": "Nova senha",
         "LBL_PASSWORD": "Senha",
         "LBL_PASSWORD_CONFIRMATION": "Confirmação de senha",
+        "LBL_RESET_PASSWORD": "Redefinir senha",
         "LBL_STATUS": "Status",
         "LBL_UPDATE": "Alterar",
         "LBL_USER": "Usuário",
@@ -404,7 +410,63 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
     };
     
 }]);
-/*global angular*/
+/*global angular, jsSHA*/
+(function () {
+    'use strict';
+
+    function ResetPassword(hub) {
+
+        var vm = this,
+            process = hub.processHandler(vm, 'loading');
+
+        vm.user = {};
+        vm.loading = process.loading;
+
+        vm.save = function () {
+            /*jslint newcap: true */
+            var shaObj = new jsSHA(vm.user.password, "TEXT"),
+                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64"),
+                userData;
+
+            userData = angular.copy(vm.user);
+            userData.password = hash;
+
+            function onSuccess(result) {
+                hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
+                vm.goBack();
+            }
+
+            hub.invoker.invoke('user', 'resetPassword', userData, process.onStart, onSuccess, process.onError, process.onFinally);
+        };
+
+        vm.showUserDetails = function (id) {
+            if (!id) {
+                return;
+            }
+
+            function onSuccess(result) {
+                result.data.$$data.password = '';
+                vm.user = result.data.$$data;
+            }
+
+            hub.invoker.invoke('user', 'getDetails', {id: id}, process.onStart, onSuccess, process.onError, process.onFinally);
+
+        };
+
+        vm.goBack = function () {
+            hub.$location.path('/user/' + hub.$routeParams.id);
+        };
+
+        vm.showUserDetails(hub.$routeParams.id);
+
+    }
+
+    ResetPassword.$inject = ['hub'];
+
+    angular.module('wt-backoffice').controller('resetPassword', ResetPassword);
+
+}());
+/*global angular, jsSHA*/
 (function () {
     'use strict';
 
@@ -421,34 +483,35 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
         function execute(operation) {
             /*jslint newcap: true */
             var shaObj = new jsSHA(vm.user.password, "TEXT"),
-                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64");
+                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64"),
+                userData;
 
             function onSuccess(result) {
                 hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
                 vm.goBack();
             }
+            
+            userData = angular.copy(vm.user);
 
             if (operation === 'createUser') {
-                vm.user.password = hash;
+                userData.password = hash;
             }
 
-            hub.invoker.invoke('user', operation, vm.user, process.onStart, onSuccess, process.onError, process.onFinally);
+            hub.invoker.invoke('user', operation, userData, process.onStart, onSuccess, process.onError, process.onFinally);
         }
 
         vm.save = function () {
-            var operation = 'updateUser';
-
-            if (vm.isNew) {
-                operation = 'createUser';
-            }
-
-            execute(operation);
+            execute(vm.isNew === true ? 'createUser' : 'updateUser');
         };
 
         vm.remove = function () {
             if (hub.$window.confirm(hub.translate.getTerm('MSG_CONFIRM_OPERATION'))) {
                 execute('removeUser');
             }
+        };
+        
+        vm.resetPassword = function () {
+            hub.$location.path('/user/resetPassword/' + hub.$routeParams.id);
         };
 
         vm.showUserDetails = function (id) {

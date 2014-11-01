@@ -1,4 +1,4 @@
-/*global angular*/
+/*global angular, jsSHA*/
 (function () {
     'use strict';
 
@@ -15,34 +15,35 @@
         function execute(operation) {
             /*jslint newcap: true */
             var shaObj = new jsSHA(vm.user.password, "TEXT"),
-                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64");
+                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64"),
+                userData;
 
             function onSuccess(result) {
                 hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
                 vm.goBack();
             }
+            
+            userData = angular.copy(vm.user);
 
             if (operation === 'createUser') {
-                vm.user.password = hash;
+                userData.password = hash;
             }
 
-            hub.invoker.invoke('user', operation, vm.user, process.onStart, onSuccess, process.onError, process.onFinally);
+            hub.invoker.invoke('user', operation, userData, process.onStart, onSuccess, process.onError, process.onFinally);
         }
 
         vm.save = function () {
-            var operation = 'updateUser';
-
-            if (vm.isNew) {
-                operation = 'createUser';
-            }
-
-            execute(operation);
+            execute(vm.isNew === true ? 'createUser' : 'updateUser');
         };
 
         vm.remove = function () {
             if (hub.$window.confirm(hub.translate.getTerm('MSG_CONFIRM_OPERATION'))) {
                 execute('removeUser');
             }
+        };
+        
+        vm.resetPassword = function () {
+            hub.$location.path('/user/resetPassword/' + hub.$routeParams.id);
         };
 
         vm.showUserDetails = function (id) {
