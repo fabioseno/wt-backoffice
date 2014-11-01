@@ -16,6 +16,8 @@
             if (sortField) {
                 data.sort = sortField;
             }
+            
+            return data;
         };
 
         this.sort = function (sortPreferences, field, listCallback, currentPage) {

@@ -17,8 +17,14 @@ angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate'
             },
 
             onError = function (error) {
-                var messages = [translate.getTerm('MSG_OPERATION_FAIL')],
+                var messages = [],
                     type = 'error';
+
+                if (error.status !== 401) {
+                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
+                } else {
+                    messages.push(translate.getTerm('MSG_SESSION_EXPIRED'));
+                }
 
                 if (error.data) {
                     if (error.data.messages) {

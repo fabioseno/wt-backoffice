@@ -8,6 +8,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "MSG_INVALID_USER_PASSWORD": "Usuário ou senha inválidos!",
         "MSG_OPERATION_FAIL": "Ocorreu um erro durante a operação.<br />Por favor tente novamente!",
         "MSG_OPERATION_SUCCESS": "Operação realizada com sucesso!",
+        "MSG_SESSION_EXPIRED": "Sua sessão expirou.<br />Favor realizar novo login!",
         "MSG_TYPE_SEARCH_TERM": "Digite um termo de busca...",
         "LBL_CANCEL": "Cancelar",
         "LBL_CREATE": "Criar",

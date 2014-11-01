@@ -57,6 +57,8 @@ angular
             if (sortField) {
                 data.sort = sortField;
             }
+            
+            return data;
         };
 
         this.sort = function (sortPreferences, field, listCallback, currentPage) {
@@ -134,8 +136,14 @@ angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate'
             },
 
             onError = function (error) {
-                var messages = [translate.getTerm('MSG_OPERATION_FAIL')],
+                var messages = [],
                     type = 'error';
+
+                if (error.status !== 401) {
+                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
+                } else {
+                    messages.push(translate.getTerm('MSG_SESSION_EXPIRED'));
+                }
 
                 if (error.data) {
                     if (error.data.messages) {
@@ -366,6 +374,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "MSG_INVALID_USER_PASSWORD": "Usuário ou senha inválidos!",
         "MSG_OPERATION_FAIL": "Ocorreu um erro durante a operação.<br />Por favor tente novamente!",
         "MSG_OPERATION_SUCCESS": "Operação realizada com sucesso!",
+        "MSG_SESSION_EXPIRED": "Sua sessão expirou. Favor realizar novo login!",
         "MSG_TYPE_SEARCH_TERM": "Digite um termo de busca...",
         "LBL_CANCEL": "Cancelar",
         "LBL_CREATE": "Criar",
