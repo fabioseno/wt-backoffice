@@ -4,6 +4,10 @@ angular.module('wt-backoffice').constant('wtCoreConfig', {
         authenticate: {
             url: 'http://localhost:8080/api/login',
             method: 'POST'
+        },
+        logout: {
+            url: 'http://localhost:8080/api/logout',
+            method: 'POST'
         }
     },
     user: {

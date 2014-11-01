@@ -1,4 +1,4 @@
-<header>
+<header data-ng-controller="header as header">
     <ul>
         <li>
             <a href="#/users" class="logo" title="Home"></a>
@@ -22,7 +22,7 @@
             </a>
         </li>
         <li>
-            <a title="Logout">
+            <a title="Logout" data-ng-click="header.logout()">
                 <i class="fa fa-sign-out fa-lg"></i>
             </a>
         </li>

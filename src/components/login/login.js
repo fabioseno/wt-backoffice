@@ -23,6 +23,7 @@
 
             function onSuccess(result) {
                 authentication.setSessionId(result.headers('X-SessionId'));
+                authentication.setContext(result.data.$$data);
                 hub.toastr.show(hub.translate.getTerm('MSG_ACCESS GRANTED', result.data.$$data.name), 'success');
                 hub.$location.path('/users');
             }
