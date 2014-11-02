@@ -2,12 +2,13 @@
 (function () {
     'use strict';
 
-    function UserDetails(hub) {
+    function UserDetails(hub, userModel) {
 
         var vm = this,
             process = hub.processHandler(vm, 'loading');
 
         vm.user = {};
+        vm.statusList = hub.translate.getTermsList(userModel.status, 'LBL_USER_STATUS_', 'key');
         vm.loading = process.loading;
         vm.saveLabel = hub.translate.getTerm('LBL_CREATE');
         vm.isNew = true;
@@ -75,7 +76,7 @@
 
     }
 
-    UserDetails.$inject = ['hub'];
+    UserDetails.$inject = ['hub', 'userModel'];
 
     angular.module('wt-backoffice').controller('userDetails', UserDetails);
 

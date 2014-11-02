@@ -39,7 +39,10 @@
                     <div class="form-group">
                         <label for="inputStatus" class="col-md-2 control-label">{{ 'LBL_STATUS' | i18n }}</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="inputStatus" data-ng-model="vm.user.status" required>
+                            <select data-ng-model="vm.user.status" required>
+                                <option value="">-- {{ 'LBL_SELECT' | i18n }} --</option>
+                                <option value={{status.key}} data-ng-repeat="status in vm.statusList">{{ status.$$term }}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">

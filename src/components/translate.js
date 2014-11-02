@@ -23,11 +23,15 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_PASSWORD": "Senha",
         "LBL_PASSWORD_CONFIRMATION": "Confirmação de senha",
         "LBL_RESET_PASSWORD": "Redefinir senha",
+        "LBL_SELECT": "Selecione",
         "LBL_STATUS": "Status",
         "LBL_UPDATE": "Alterar",
         "LBL_USER": "Usuário",
+        "LBL_USER_STATUS_A": "Ativo",
+        "LBL_USER_STATUS_I": "Inativo",
         "LBL_USERS": "Usuários"
-    };
+    },
+        self = this;
     
     this.getTerm = function (key, args) {
         var result = terms[key] || '',
@@ -42,6 +46,14 @@ angular.module('wt-backoffice').service('translate', function () {
         return result;
     };
     
+    this.getTermsList = function (list, prefix, attribute) {
+        angular.forEach(list, function (item) {
+            item.$$term = self.getTerm(prefix + item[attribute]);
+        });
+        
+        return list;
+    };
+    
 });
 
 angular.module('wt-backoffice').filter('i18n', ['translate', function (translate) {
@@ -49,7 +61,6 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
     
     return function (key, args) {
         return translate.getTerm.apply(this, arguments);
-        
     };
     
 }]);

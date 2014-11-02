@@ -374,7 +374,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "MSG_INVALID_USER_PASSWORD": "Usuário ou senha inválidos!",
         "MSG_OPERATION_FAIL": "Ocorreu um erro durante a operação.<br />Por favor tente novamente!",
         "MSG_OPERATION_SUCCESS": "Operação realizada com sucesso!",
-        "MSG_SESSION_EXPIRED": "Sua sessão expirou. Favor realizar novo login!",
+        "MSG_SESSION_EXPIRED": "Sua sessão expirou.<br />Favor realizar novo login!",
         "MSG_TYPE_SEARCH_TERM": "Digite um termo de busca...",
         "LBL_CANCEL": "Cancelar",
         "LBL_CREATE": "Criar",
@@ -389,11 +389,15 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_PASSWORD": "Senha",
         "LBL_PASSWORD_CONFIRMATION": "Confirmação de senha",
         "LBL_RESET_PASSWORD": "Redefinir senha",
+        "LBL_SELECT": "Selecione",
         "LBL_STATUS": "Status",
         "LBL_UPDATE": "Alterar",
         "LBL_USER": "Usuário",
+        "LBL_USER_STATUS_A": "Ativo",
+        "LBL_USER_STATUS_I": "Inativo",
         "LBL_USERS": "Usuários"
-    };
+    },
+        self = this;
     
     this.getTerm = function (key, args) {
         var result = terms[key] || '',
@@ -408,6 +412,14 @@ angular.module('wt-backoffice').service('translate', function () {
         return result;
     };
     
+    this.getTermsList = function (list, prefix, attribute) {
+        angular.forEach(list, function (item) {
+            item.$$term = self.getTerm(prefix + item[attribute]);
+        });
+        
+        return list;
+    };
+    
 });
 
 angular.module('wt-backoffice').filter('i18n', ['translate', function (translate) {
@@ -415,7 +427,6 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
     
     return function (key, args) {
         return translate.getTerm.apply(this, arguments);
-        
     };
     
 }]);
@@ -479,12 +490,13 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
 (function () {
     'use strict';
 
-    function UserDetails(hub) {
+    function UserDetails(hub, userModel) {
 
         var vm = this,
             process = hub.processHandler(vm, 'loading');
 
         vm.user = {};
+        vm.statusList = hub.translate.getTermsList(userModel.status, 'LBL_USER_STATUS_', 'key');
         vm.loading = process.loading;
         vm.saveLabel = hub.translate.getTerm('LBL_CREATE');
         vm.isNew = true;
@@ -552,7 +564,7 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
 
     }
 
-    UserDetails.$inject = ['hub'];
+    UserDetails.$inject = ['hub', 'userModel'];
 
     angular.module('wt-backoffice').controller('userDetails', UserDetails);
 
@@ -598,4 +610,27 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
 
     angular.module('wt-backoffice').controller('userList', UserList);
     
+}());
+/*global angular*/
+(function () {
+    'use strict';
+
+    function UserModel() {
+
+        this.status = [
+            {
+                key: 'A',
+                name: 'Active'
+            },
+            {
+                key: 'I',
+                name: 'Inactive'
+            }
+        ];
+    }
+
+    UserModel.$inject = [];
+
+    angular.module('wt-backoffice').service('userModel', UserModel);
+
 }());

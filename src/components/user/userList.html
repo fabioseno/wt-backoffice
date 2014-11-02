@@ -37,7 +37,7 @@
                     <tr data-ng-repeat="user in vm.users | filter : searchTerm" data-ng-click="base.goTo('/user/{{ user.id }}')">
                         <td data-ng-bind="user.name"></td>
                         <td data-ng-bind="user.email"></td>
-                        <td data-ng-bind="user.status"></td>
+                        <td data-ng-bind="'LBL_USER_STATUS_' + user.status | i18n"></td>
                         <td></td>
                     </tr>
                 </table>
