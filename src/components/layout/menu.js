@@ -32,7 +32,7 @@
                     {
                         id: 'myProfile',
                         name: 'Meu perfil',
-                        link: '/myprofile'
+                        link: '/profile'
                     }
                 ]
             }

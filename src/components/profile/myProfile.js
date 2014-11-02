@@ -10,6 +10,10 @@
         vm.user = {};
         vm.loading = process.loading;
 
+        vm.changePassword = function () {
+            hub.$location.path('/profile/changePassword');
+        };
+
         vm.showUserDetails = function (id) {
             if (!id) {
                 return;
@@ -23,7 +27,7 @@
             hub.invoker.invoke('user', 'getDetails', {id: id}, process.onStart, onSuccess, process.onError, process.onFinally);
 
         };
-        
+
         vm.showUserDetails(authentication.getContext().id);
 
     }

@@ -25,9 +25,13 @@ angular
             templateUrl: 'components/user/resetPassword.html',
             controller: 'resetPassword',
             controllerAs: 'vm'
-        }).when('/myprofile', {
+        }).when('/profile', {
             templateUrl: 'components/profile/myProfile.html',
             controller: 'myProfile',
+            controllerAs: 'vm'
+        }).when('/profile/changePassword', {
+            templateUrl: 'components/profile/changePassword.html',
+            controller: 'changePassword',
             controllerAs: 'vm'
         }).when('/files/upload', {
             templateUrl: 'components/files/upload.html',

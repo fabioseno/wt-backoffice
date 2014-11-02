@@ -25,9 +25,13 @@ angular
             templateUrl: 'components/user/resetPassword.html',
             controller: 'resetPassword',
             controllerAs: 'vm'
-        }).when('/myprofile', {
+        }).when('/profile', {
             templateUrl: 'components/profile/myProfile.html',
             controller: 'myProfile',
+            controllerAs: 'vm'
+        }).when('/profile/changePassword', {
+            templateUrl: 'components/profile/changePassword.html',
+            controller: 'changePassword',
             controllerAs: 'vm'
         }).when('/files/upload', {
             templateUrl: 'components/files/upload.html',
@@ -143,20 +147,16 @@ angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate'
                 var messages = [],
                     type = 'error';
 
-                if (error.status !== 401) {
-                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
-                } else {
-                    messages.push(translate.getTerm('MSG_SESSION_EXPIRED'));
-                }
-
                 if (error.data) {
-                    if (error.data.messages) {
-                        messages = error.data.messages;
+                    if (error.data.$$messages) {
+                        messages = error.data.$$messages;
                     }
 
                     if (error.data.type) {
                         type = error.data.type;
                     }
+                } else {
+                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
                 }
 
                 if (messages.length > 0) {
@@ -298,7 +298,7 @@ angular.module('wt-backoffice').controller('upload', ['$scope', '$upload', funct
                     {
                         id: 'myProfile',
                         name: 'Meu perfil',
-                        link: '/myprofile'
+                        link: '/profile'
                     }
                 ]
             }
@@ -377,13 +377,35 @@ angular.module('wt-backoffice').directive('', function () {
 (function () {
     'use strict';
 
-    function MyProfile(hub, authentication) {
+    function ChangePassword(hub, authentication) {
 
         var vm = this,
             process = hub.processHandler(vm, 'loading');
 
         vm.user = {};
         vm.loading = process.loading;
+
+        vm.save = function () {
+            /*jslint newcap: true */
+            var shaObj = new jsSHA(vm.user.password, "TEXT"),
+                hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64"),
+                userData;
+
+            userData = angular.copy(vm.user);
+            userData.password = hash;
+
+            shaObj = new jsSHA(vm.user.newPassword, "TEXT");
+            hash = shaObj.getHMAC(vm.user.email, "TEXT", "SHA-1", "B64");
+
+            userData.newPassword = hash;
+            
+            function onSuccess(result) {
+                hub.toastr.show(hub.translate.getTerm('MSG_OPERATION_SUCCESS'), 'success');
+                vm.goBack();
+            }
+
+            hub.invoker.invoke('user', 'changePassword', userData, process.onStart, onSuccess, process.onError, process.onFinally);
+        };
 
         vm.showUserDetails = function (id) {
             if (!id) {
@@ -398,7 +420,50 @@ angular.module('wt-backoffice').directive('', function () {
             hub.invoker.invoke('user', 'getDetails', {id: id}, process.onStart, onSuccess, process.onError, process.onFinally);
 
         };
-        
+
+        vm.goBack = function () {
+            hub.$location.path('/profile');
+        };
+
+        vm.showUserDetails(authentication.getContext().id);
+
+    }
+
+    ChangePassword.$inject = ['hub', 'authentication'];
+
+    angular.module('wt-backoffice').controller('changePassword', ChangePassword);
+
+}());
+/*global angular, jsSHA*/
+(function () {
+    'use strict';
+
+    function MyProfile(hub, authentication) {
+
+        var vm = this,
+            process = hub.processHandler(vm, 'loading');
+
+        vm.user = {};
+        vm.loading = process.loading;
+
+        vm.changePassword = function () {
+            hub.$location.path('/profile/changePassword');
+        };
+
+        vm.showUserDetails = function (id) {
+            if (!id) {
+                return;
+            }
+
+            function onSuccess(result) {
+                result.data.$$data.password = '';
+                vm.user = result.data.$$data;
+            }
+
+            hub.invoker.invoke('user', 'getDetails', {id: id}, process.onStart, onSuccess, process.onError, process.onFinally);
+
+        };
+
         vm.showUserDetails(authentication.getContext().id);
 
     }
@@ -415,12 +480,12 @@ angular.module('wt-backoffice').service('translate', function () {
     var terms = {
         "MSG_ACCESS GRANTED": "Acesso permitido!<br />Bem-vindo, {0}",
         "MSG_CONFIRM_OPERATION": "Confirma a operação?",
-        "MSG_INVALID_USER_PASSWORD": "Usuário ou senha inválidos!",
         "MSG_OPERATION_FAIL": "Ocorreu um erro durante a operação.<br />Por favor tente novamente!",
         "MSG_OPERATION_SUCCESS": "Operação realizada com sucesso!",
         "MSG_SESSION_EXPIRED": "Sua sessão expirou.<br />Favor realizar novo login!",
         "MSG_TYPE_SEARCH_TERM": "Digite um termo de busca...",
         "LBL_CANCEL": "Cancelar",
+        "LBL_CHANGE_PASSWORD": "Alterar senha",
         "LBL_CREATE": "Criar",
         "LBL_DELETE": "Excluir",
         "LBL_EMAIL": "E-mail",
@@ -431,6 +496,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_NAME": "Name",
         "LBL_NEW_USER": "Novo usuário",
         "LBL_NEW_PASSWORD": "Nova senha",
+        "LBL_OLD_PASSWORD": "Senha atual",
         "LBL_PASSWORD": "Senha",
         "LBL_PASSWORD_CONFIRMATION": "Confirmação de senha",
         "LBL_RESET_PASSWORD": "Redefinir senha",

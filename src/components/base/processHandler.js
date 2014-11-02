@@ -20,20 +20,16 @@ angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate'
                 var messages = [],
                     type = 'error';
 
-                if (error.status !== 401) {
-                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
-                } else {
-                    messages.push(translate.getTerm('MSG_SESSION_EXPIRED'));
-                }
-
                 if (error.data) {
-                    if (error.data.messages) {
-                        messages = error.data.messages;
+                    if (error.data.$$messages) {
+                        messages = error.data.$$messages;
                     }
 
                     if (error.data.type) {
                         type = error.data.type;
                     }
+                } else {
+                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
                 }
 
                 if (messages.length > 0) {

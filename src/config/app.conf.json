@@ -34,6 +34,10 @@ angular.module('wt-backoffice').constant('wtCoreConfig', {
         resetPassword: {
             url: 'http://localhost:8080/api/user/resetPassword/:id',
             method: 'POST'
+        },
+        changePassword: {
+            url: 'http://localhost:8080/api/changePassword',
+            method: 'POST'
         }
     }
 });
