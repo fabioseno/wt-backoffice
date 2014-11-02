@@ -1,0 +1,28 @@
+<div class="page">
+    <div id="pad-wrapper" class="form-page">
+        <div class="row header">
+            <div class="col-md-12">
+                <h3>{{ 'LBL_MY_PROFILE' | i18n }}</h3>
+            </div>                
+        </div>
+        <div class="row form-wrapper">
+            <div data-loader="vm.loading"></div>
+            <div class="col-md-9 with-sidebar">
+                <form name="form" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">{{ 'LBL_NAME' | i18n }}</label>
+                        <div class="col-md-8">
+                            <span data-ng-bind="vm.user.name"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail" class="col-md-2 control-label">{{ 'LBL_EMAIL' | i18n }}</label>
+                        <div class="col-md-8">
+                            <span data-ng-bind="vm.user.email"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>    
+    </div>
+</div>

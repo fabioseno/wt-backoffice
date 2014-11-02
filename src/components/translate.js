@@ -17,6 +17,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_ENTER": "Entrar",
         "LBL_FILTER": "Filtrar",
         "LBL_LOGIN": "Login",
+        "LBL_MY_PROFILE": "Meu perfil",
         "LBL_NAME": "Name",
         "LBL_NEW_USER": "Novo usuário",
         "LBL_NEW_PASSWORD": "Nova senha",

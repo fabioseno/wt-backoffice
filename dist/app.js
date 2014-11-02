@@ -25,6 +25,10 @@ angular
             templateUrl: 'components/user/resetPassword.html',
             controller: 'resetPassword',
             controllerAs: 'vm'
+        }).when('/myprofile', {
+            templateUrl: 'components/profile/myProfile.html',
+            controller: 'myProfile',
+            controllerAs: 'vm'
         }).when('/files/upload', {
             templateUrl: 'components/files/upload.html',
             controller: 'upload',
@@ -283,13 +287,18 @@ angular.module('wt-backoffice').controller('upload', ['$scope', '$upload', funct
                 items: [
                     {
                         id: 'userList',
-                        name: 'User list',
+                        name: 'Usuários',
                         link: '/users'
                     },
                     {
                         id: 'newUser',
-                        name: 'New user',
+                        name: 'Novo usuário',
                         link: '/user'
+                    },
+                    {
+                        id: 'myProfile',
+                        name: 'Meu perfil',
+                        link: '/myprofile'
                     }
                 ]
             }
@@ -364,6 +373,41 @@ angular.module('wt-backoffice').directive('', function () {
 
     angular.module('wt-backoffice').controller('login', Login);
 }());
+/*global angular, jsSHA*/
+(function () {
+    'use strict';
+
+    function MyProfile(hub, authentication) {
+
+        var vm = this,
+            process = hub.processHandler(vm, 'loading');
+
+        vm.user = {};
+        vm.loading = process.loading;
+
+        vm.showUserDetails = function (id) {
+            if (!id) {
+                return;
+            }
+
+            function onSuccess(result) {
+                result.data.$$data.password = '';
+                vm.user = result.data.$$data;
+            }
+
+            hub.invoker.invoke('user', 'getDetails', {id: id}, process.onStart, onSuccess, process.onError, process.onFinally);
+
+        };
+        
+        vm.showUserDetails(authentication.getContext().id);
+
+    }
+
+    MyProfile.$inject = ['hub', 'authentication'];
+
+    angular.module('wt-backoffice').controller('myProfile', MyProfile);
+
+}());
 /*global angular */
 angular.module('wt-backoffice').service('translate', function () {
     'use strict';
@@ -383,6 +427,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_ENTER": "Entrar",
         "LBL_FILTER": "Filtrar",
         "LBL_LOGIN": "Login",
+        "LBL_MY_PROFILE": "Meu perfil",
         "LBL_NAME": "Name",
         "LBL_NEW_USER": "Novo usuário",
         "LBL_NEW_PASSWORD": "Nova senha",

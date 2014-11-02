@@ -21,13 +21,18 @@
                 items: [
                     {
                         id: 'userList',
-                        name: 'User list',
+                        name: 'Usuários',
                         link: '/users'
                     },
                     {
                         id: 'newUser',
-                        name: 'New user',
+                        name: 'Novo usuário',
                         link: '/user'
+                    },
+                    {
+                        id: 'myProfile',
+                        name: 'Meu perfil',
+                        link: '/myprofile'
                     }
                 ]
             }
