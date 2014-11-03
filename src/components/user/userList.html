@@ -23,6 +23,10 @@
                     <thead>
                         <tr>
                             <th class="col-md-4 sortable" data-ng-click="vm.sort('name')">{{ 'LBL_NAME' | i18n }}</th>
+                            <th class="col-md-4 sortable" data-ng-click="vm.sort('language')">
+                                <span class="line"></span>
+                                {{ 'LBL_LANGUAGE' | i18n }}
+                            </th>
                             <th class="col-md-4 sortable" data-ng-click="vm.sort('email')">
                                 <span class="line"></span>
                                 {{ 'LBL_EMAIL' | i18n }}
@@ -36,6 +40,7 @@
                     </thead>
                     <tr data-ng-repeat="user in vm.users | filter : searchTerm" data-ng-click="base.goTo('/user/{{ user.id }}')">
                         <td data-ng-bind="user.name"></td>
+                        <td data-ng-bind="'LBL_LANGUAGE_' + user.language | i18n"></td>
                         <td data-ng-bind="user.email"></td>
                         <td data-ng-bind="'LBL_USER_STATUS_' + user.status | i18n"></td>
                         <td></td>

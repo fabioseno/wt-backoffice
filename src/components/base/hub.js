@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    function Hub($rootScope, $location, $q, $routeParams, $window, invoker, eventHub, translate, processHandler, toastr) {
+    function Hub($rootScope, $location, $q, $routeParams, $window, invoker, eventHub, translate, processHandler, toastr, authentication) {
         
         this.$location = $location;
         
@@ -29,9 +29,15 @@
         $rootScope.$on('UNAUTHORIZED', function (event, data) {
             $location.path('/login');
         });
+        
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            if ($location.url() !== '/' && $location.url() !== '/login' && !authentication.getSessionId()) {
+                $location.path('/login');
+            }
+        });
     }
 
-    Hub.$inject = ['$rootScope', '$location', '$q', '$routeParams', '$window', 'invoker', 'eventHub', 'translate', 'processHandler', 'toastr'];
+    Hub.$inject = ['$rootScope', '$location', '$q', '$routeParams', '$window', 'invoker', 'eventHub', 'translate', 'processHandler', 'toastr', 'authentication'];
 
     angular.module('wt-backoffice').service('hub', Hub);
 

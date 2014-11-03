@@ -91,7 +91,7 @@ angular
 (function () {
     'use strict';
 
-    function Hub($rootScope, $location, $q, $routeParams, $window, invoker, eventHub, translate, processHandler, toastr) {
+    function Hub($rootScope, $location, $q, $routeParams, $window, invoker, eventHub, translate, processHandler, toastr, authentication) {
         
         this.$location = $location;
         
@@ -118,9 +118,15 @@ angular
         $rootScope.$on('UNAUTHORIZED', function (event, data) {
             $location.path('/login');
         });
+        
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            if ($location.url() !== '/' && $location.url() !== '/login' && !authentication.getSessionId()) {
+                $location.path('/login');
+            }
+        });
     }
 
-    Hub.$inject = ['$rootScope', '$location', '$q', '$routeParams', '$window', 'invoker', 'eventHub', 'translate', 'processHandler', 'toastr'];
+    Hub.$inject = ['$rootScope', '$location', '$q', '$routeParams', '$window', 'invoker', 'eventHub', 'translate', 'processHandler', 'toastr', 'authentication'];
 
     angular.module('wt-backoffice').service('hub', Hub);
 
@@ -147,16 +153,20 @@ angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate'
                 var messages = [],
                     type = 'error';
 
-                if (error.data) {
-                    if (error.data.$$messages) {
-                        messages = error.data.$$messages;
-                    }
-
-                    if (error.data.type) {
-                        type = error.data.type;
-                    }
+                if (error.status === 0) {
+                     messages.push(translate.getTerm('MSG_UNABLE_TO_CONNECT_TO_SERVER'));
                 } else {
-                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
+                    if (error.data) {
+                        if (error.data.$$messages) {
+                            messages = error.data.$$messages;
+                        }
+
+                        if (error.data.type) {
+                            type = error.data.type;
+                        }
+                    } else {
+                        messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
+                    }
                 }
 
                 if (messages.length > 0) {
@@ -235,6 +245,29 @@ angular.module('wt-backoffice').controller('upload', ['$scope', '$upload', funct
         }
     };
 }]);
+/*global angular*/
+(function () {
+    'use strict';
+
+    function LanguageModel() {
+
+        this.languages = [
+            {
+                key: 'PT',
+                name: 'Português'
+            },
+            {
+                key: 'EN',
+                name: 'Inglês'
+            }
+        ];
+    }
+
+    LanguageModel.$inject = [];
+
+    angular.module('wt-backoffice').service('languageModel', LanguageModel);
+
+}());
 /*global angular*/
 (function () {
     'use strict';
@@ -484,6 +517,7 @@ angular.module('wt-backoffice').service('translate', function () {
         "MSG_OPERATION_SUCCESS": "Operação realizada com sucesso!",
         "MSG_SESSION_EXPIRED": "Sua sessão expirou.<br />Favor realizar novo login!",
         "MSG_TYPE_SEARCH_TERM": "Digite um termo de busca...",
+        "MSG_UNABLE_TO_CONNECT_TO_SERVER": "Não foi possível conectar com o servidor!<br />Por favor tente novamente!",
         "LBL_CANCEL": "Cancelar",
         "LBL_CHANGE_PASSWORD": "Alterar senha",
         "LBL_CREATE": "Criar",
@@ -491,6 +525,9 @@ angular.module('wt-backoffice').service('translate', function () {
         "LBL_EMAIL": "E-mail",
         "LBL_ENTER": "Entrar",
         "LBL_FILTER": "Filtrar",
+        "LBL_LANGUAGE": "Idioma",
+        "LBL_LANGUAGE_PT": "Português",
+        "LBL_LANGUAGE_EN": "Inglês",
         "LBL_LOGIN": "Login",
         "LBL_MY_PROFILE": "Meu perfil",
         "LBL_NAME": "Name",
@@ -601,12 +638,13 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
 (function () {
     'use strict';
 
-    function UserDetails(hub, userModel) {
+    function UserDetails(hub, userModel, languageModel) {
 
         var vm = this,
             process = hub.processHandler(vm, 'loading');
 
         vm.user = {};
+        vm.languages = hub.translate.getTermsList(languageModel.languages, 'LBL_LANGUAGE_', 'key');
         vm.statusList = hub.translate.getTermsList(userModel.status, 'LBL_USER_STATUS_', 'key');
         vm.loading = process.loading;
         vm.saveLabel = hub.translate.getTerm('LBL_CREATE');
@@ -675,7 +713,7 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
 
     }
 
-    UserDetails.$inject = ['hub', 'userModel'];
+    UserDetails.$inject = ['hub', 'userModel', 'languageModel'];
 
     angular.module('wt-backoffice').controller('userDetails', UserDetails);
 

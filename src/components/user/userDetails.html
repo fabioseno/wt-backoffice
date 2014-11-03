@@ -24,6 +24,15 @@
                             <span data-ng-show="!form.inputEmail.$error.required && form.inputEmail.$error.email && form.inputEmail.$dirty">invalid email</span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="inputStatus" class="col-md-2 control-label">{{ 'LBL_LANGUAGE' | i18n }}</label>
+                        <div class="col-md-8">
+                            <select data-ng-model="vm.user.language" required>
+                                <option value="">-- {{ 'LBL_SELECT' | i18n }} --</option>
+                                <option value="{{language.key}}" data-ng-repeat="language in vm.languages">{{ language.$$term }}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group" data-ng-show="vm.isNew">
                         <label for="inputPassword" class="col-md-2 control-label">{{ 'LBL_PASSWORD' | i18n }}</label>
                         <div class="col-md-8">
@@ -41,7 +50,7 @@
                         <div class="col-md-8">
                             <select data-ng-model="vm.user.status" required>
                                 <option value="">-- {{ 'LBL_SELECT' | i18n }} --</option>
-                                <option value={{status.key}} data-ng-repeat="status in vm.statusList">{{ status.$$term }}</option>
+                                <option value="{{status.key}}" data-ng-repeat="status in vm.statusList">{{ status.$$term }}</option>
                             </select>
                         </div>
                     </div>

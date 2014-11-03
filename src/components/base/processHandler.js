@@ -20,16 +20,20 @@ angular.module('wt-backoffice').factory('processHandler', ['toastr', 'translate'
                 var messages = [],
                     type = 'error';
 
-                if (error.data) {
-                    if (error.data.$$messages) {
-                        messages = error.data.$$messages;
-                    }
-
-                    if (error.data.type) {
-                        type = error.data.type;
-                    }
+                if (error.status === 0) {
+                     messages.push(translate.getTerm('MSG_UNABLE_TO_CONNECT_TO_SERVER'));
                 } else {
-                    messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
+                    if (error.data) {
+                        if (error.data.$$messages) {
+                            messages = error.data.$$messages;
+                        }
+
+                        if (error.data.type) {
+                            type = error.data.type;
+                        }
+                    } else {
+                        messages.push(translate.getTerm('MSG_OPERATION_FAIL'));
+                    }
                 }
 
                 if (messages.length > 0) {
