@@ -16,7 +16,7 @@
         vm.loading = process.loading;
 
         vm.sort = function (field) {
-            form.sort(vm.sortField, field, vm.showUsers, vm.currentPage);
+            form.sort(vm, field, vm.showUsers, vm.currentPage);
         };
 
         vm.showUsers = function (page) {

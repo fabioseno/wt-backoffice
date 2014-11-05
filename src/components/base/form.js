@@ -20,12 +20,12 @@
             return data;
         };
 
-        this.sort = function (sortPreferences, field, listCallback, currentPage) {
-            if (!sortPreferences[field]) {
-                sortPreferences = {};
-                sortPreferences[field] = 1;
+        this.sort = function (vm, field, listCallback, currentPage) {
+            if (!vm.sortField[field]) {
+                vm.sortField = {};
+                vm.sortField[field] = 1;
             } else {
-                sortPreferences[field] = sortPreferences[field] === 1 ? -1 : 1;
+                vm.sortField[field] = vm.sortField[field] === 1 ? -1 : 1;
             }
 
             listCallback(currentPage);

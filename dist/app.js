@@ -69,12 +69,12 @@ angular
             return data;
         };
 
-        this.sort = function (sortPreferences, field, listCallback, currentPage) {
-            if (!sortPreferences[field]) {
-                sortPreferences = {};
-                sortPreferences[field] = 1;
+        this.sort = function (vm, field, listCallback, currentPage) {
+            if (!vm.sortField[field]) {
+                vm.sortField = {};
+                vm.sortField[field] = 1;
             } else {
-                sortPreferences[field] = sortPreferences[field] === 1 ? -1 : 1;
+                vm.sortField[field] = vm.sortField[field] === 1 ? -1 : 1;
             }
 
             listCallback(currentPage);
@@ -736,7 +736,7 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
         vm.loading = process.loading;
 
         vm.sort = function (field) {
-            form.sort(vm.sortField, field, vm.showUsers, vm.currentPage);
+            form.sort(vm, field, vm.showUsers, vm.currentPage);
         };
 
         vm.showUsers = function (page) {
