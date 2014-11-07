@@ -27,7 +27,7 @@
                 vm.currentPage = result.data.$$data.page.currentPage;
             }
 
-            hub.invoker.invoke('user', 'getList', form.getListMetadata(page, vm.sortField), process.onStart, onSuccess, process.onError, process.onFinally);
+            hub.invoker.invoke('user', 'getList', form.getListMetadata(page, vm.sortField, vm.searchTerm), process.onStart, onSuccess, process.onError, process.onFinally);
 
         };
 

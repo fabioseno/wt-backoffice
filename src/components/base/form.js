@@ -4,13 +4,14 @@
 
     function Form(hub) {
 
-        this.getListMetadata = function (page, sortField) {
+        this.getListMetadata = function (page, sortField, searchTerm) {
             var data = {
                 filter: {},
                 page: {
                     pageSize: 2,
                     currentPage: page
-                }
+                },
+                searchTerm: searchTerm
             };
 
             if (sortField) {

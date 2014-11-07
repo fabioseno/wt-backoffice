@@ -53,13 +53,14 @@ angular
 
     function Form(hub) {
 
-        this.getListMetadata = function (page, sortField) {
+        this.getListMetadata = function (page, sortField, searchTerm) {
             var data = {
                 filter: {},
                 page: {
                     pageSize: 2,
                     currentPage: page
-                }
+                },
+                searchTerm: searchTerm
             };
 
             if (sortField) {
@@ -747,7 +748,7 @@ angular.module('wt-backoffice').filter('i18n', ['translate', function (translate
                 vm.currentPage = result.data.$$data.page.currentPage;
             }
 
-            hub.invoker.invoke('user', 'getList', form.getListMetadata(page, vm.sortField), process.onStart, onSuccess, process.onError, process.onFinally);
+            hub.invoker.invoke('user', 'getList', form.getListMetadata(page, vm.sortField, vm.searchTerm), process.onStart, onSuccess, process.onError, process.onFinally);
 
         };
 

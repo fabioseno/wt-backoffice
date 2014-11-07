@@ -4,7 +4,7 @@
             <h3>{{ 'LBL_USERS' | i18n }}</h3>
             <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
                 <input type="text" class="col-md-5 search" placeholder="{{ 'MSG_TYPE_SEARCH_TERM' | i18n }}" data-ng-model="vm.searchTerm">
-                <div class="ui-dropdown">
+                <div class="ui-dropdown" data-ng-click="vm.showUsers(1)">
                     <div class="head">
                         {{ 'LBL_FILTER' | i18n }}
                     </div>
